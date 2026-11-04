@@ -1,0 +1,54 @@
+/* Pantalla 10: mi reflexión. Fondo lila (el tinte de la ronda avanzada). */
+
+.reflexion { min-height: 100vh; min-height: 100dvh; background: var(--color-avanzada-soft); }
+
+.reflexion__cabecera { display: flex; align-items: center; justify-content: space-between; gap: var(--espacio-3); min-height: var(--tamano-tocable-min); color: var(--color-avanzada-ink); text-transform: uppercase; letter-spacing: 0.06em; }
+
+.reflexion__lapiz { width: 40px; height: 40px; flex: none; transform-origin: 20% 80%; animation: escribir 1.6s ease-in-out infinite; }
+.reflexion__lapiz-cuerpo { fill: var(--color-aplicacion); stroke: var(--color-aplicacion-ink); stroke-width: 1.5; stroke-linejoin: round; }
+.reflexion__lapiz-goma { fill: var(--color-star); stroke: var(--color-aplicacion-ink); stroke-width: 1.5; stroke-linejoin: round; }
+.reflexion__lapiz-madera { fill: var(--color-aplicacion-soft); stroke: var(--color-aplicacion-ink); stroke-width: 1.5; stroke-linejoin: round; }
+.reflexion__lapiz-punta { fill: var(--color-ink); }
+@keyframes escribir {
+  0%, 100% { transform: rotate(0deg) translate(0, 0); }
+  25% { transform: rotate(-6deg) translate(-2px, 1px); }
+  50% { transform: rotate(3deg) translate(2px, -1px); }
+  75% { transform: rotate(-4deg) translate(-1px, 1px); }
+}
+
+.reflexion__pregunta { margin: var(--espacio-3) 0 var(--espacio-5); }
+
+/* Libreta con renglones: el alto del renglón es el mismo que el de la letra. */
+.reflexion__libreta {
+  --renglon: calc(var(--letra-texto-alto) + 10px);
+  position: relative;
+  padding: var(--espacio-4) var(--espacio-4) var(--espacio-4) calc(var(--espacio-7) + var(--espacio-2));
+  border-radius: var(--radio-lg);
+  background: var(--color-paper);
+  box-shadow: 0 4px 0 var(--color-avanzada-soft), 0 4px 0 2px color-mix(in srgb, var(--color-avanzada) 25%, var(--color-avanzada-soft));
+}
+.reflexion__agujeros { position: absolute; top: var(--espacio-4); bottom: var(--espacio-4); left: var(--espacio-4); display: flex; flex-direction: column; justify-content: space-between; }
+.reflexion__agujeros span { width: 18px; height: 18px; border-radius: var(--radio-full); background: var(--color-avanzada-soft); }
+
+.reflexion__etiqueta { display: block; color: var(--color-ink-muted); }
+
+.reflexion__texto {
+  display: block;
+  width: 100%;
+  min-height: calc(var(--renglon) * 9);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  resize: none;
+  background: transparent repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--renglon) - 2px), var(--color-line) calc(var(--renglon) - 2px), var(--color-line) var(--renglon));
+  color: var(--color-paper-ink);
+  font-size: var(--letra-texto-tamano);
+  line-height: var(--renglon);
+  font-weight: 600;
+}
+.reflexion__libreta:focus-within { outline: 3px solid var(--color-avanzada); outline-offset: 3px; }
+
+.reflexion__nota { margin: var(--espacio-4) 0 0; color: var(--color-avanzada-ink); text-align: center; }
+
+.reflexion__botones { display: grid; grid-template-columns: 1fr 2fr; gap: var(--espacio-3); }

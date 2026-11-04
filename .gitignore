@@ -1,0 +1,26 @@
+# Dependencias y compilados
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Claves privadas de la autora: NUNCA se suben al repositorio
+claves/
+
+# El Excel del banco trae las respuestas a la vista: queda solo en la PC de la autora.
+# El juego usa contenido/publicado/contenido.bin, que va cifrado.
+contenido/excel/
+
+# Datos del panel de administración (Supabase): nunca en el repositorio
+.env
+.env.*
+
+# Código copiado para las funciones del servidor (npm run funciones:preparar)
+supabase/functions/_shared/generado/
+supabase/.temp/
+
+# Sistema y editores
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+*.log

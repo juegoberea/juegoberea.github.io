@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Panel de Berea · Código de 6 números</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="panel.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="min-height: 900px; background: #FFF8EE; color: #1F1B3D; font-family: Nunito, 'Segoe UI', system-ui, sans-serif; display: flex; align-items: center; justify-content: center; padding: 40px 16px; position: relative; overflow: hidden">
+  <div aria-hidden="true" style="position: absolute; width: 360px; height: 360px; border-radius: 999px; background: #DDF3EF; top: -120px; left: -100px"></div>
+  <div aria-hidden="true" style="position: absolute; width: 240px; height: 240px; border-radius: 999px; background: #EEE6FB; top: 160px; right: -80px"></div>
+  <div aria-hidden="true" style="position: absolute; width: 420px; height: 420px; border-radius: 999px; background: #FDEBD7; bottom: -220px; right: 10%"></div>
+  <div style="position: relative; width: 100%; max-width: 440px; background: #FFFFFF; border-radius: 28px; box-shadow: 0 2px 0 #E9E1D3, 0 18px 40px rgba(31,27,61,0.10); padding: 36px; display: flex; flex-direction: column; gap: 20px; text-align: center">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px">
+      <span style="width: 72px; height: 72px; border-radius: 999px; background: #E1EAFD; display: grid; place-items: center">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1747A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"></rect><path d="M10.5 18.5h3"></path></svg>
+      </span>
+      <h1 style="margin: 6px 0 0; font-size: 28px; line-height: 34px; font-weight: 900">Código de 6 números</h1>
+      <p style="margin: 0; font-size: 15px; line-height: 21px; font-weight: 700; color: #5C5878">Abre la aplicación de códigos en tu celular y escribe el que aparece para Berea.</p>
+    </div>
+    <div role="group" aria-label="Código de 6 números" style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px">
+      <input aria-label="Número 1" value="4" style="height: 60px; border-radius: 12px; border: 2px solid #2B2575; text-align: center; font: 900 26px Nunito, sans-serif; color: #1F1B3D; width: 100%">
+      <input aria-label="Número 2" value="8" style="height: 60px; border-radius: 12px; border: 2px solid #2B2575; text-align: center; font: 900 26px Nunito, sans-serif; color: #1F1B3D; width: 100%">
+      <input aria-label="Número 3" value="1" style="height: 60px; border-radius: 12px; border: 2px solid #2B2575; text-align: center; font: 900 26px Nunito, sans-serif; color: #1F1B3D; width: 100%">
+      <input aria-label="Número 4" value="" style="height: 60px; border-radius: 12px; border: 2px solid #8C86A3; text-align: center; font: 900 26px Nunito, sans-serif; color: #1F1B3D; width: 100%">
+      <input aria-label="Número 5" value="" style="height: 60px; border-radius: 12px; border: 2px solid #8C86A3; text-align: center; font: 900 26px Nunito, sans-serif; color: #1F1B3D; width: 100%">
+      <input aria-label="Número 6" value="" style="height: 60px; border-radius: 12px; border: 2px solid #8C86A3; text-align: center; font: 900 26px Nunito, sans-serif; color: #1F1B3D; width: 100%">
+    </div>
+    <a href="Inicio.dc.html" class="btn pri" style="min-height: 56px; font-size: 18px">Confirmar</a>
+    <div style="display: flex; justify-content: space-between; gap: 12px; font-size: 14px; font-weight: 800">
+      <a href="Main.dc.html" style="color: #2B2575">Volver</a>
+      <a href="#" style="color: #2B2575">Usar un código de recuperación</a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

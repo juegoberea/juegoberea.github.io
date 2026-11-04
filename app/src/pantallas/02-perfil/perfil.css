@@ -1,0 +1,70 @@
+/* Pantallas 2 y 2b: perfiles y nuevo jugador. */
+
+.marca { gap: var(--espacio-2); }
+.marca__nombre { font-size: var(--letra-titulo-tamano); line-height: var(--letra-titulo-alto); font-weight: 900; }
+
+.perfiles { display: flex; flex-direction: column; gap: var(--espacio-4); margin-top: var(--espacio-5); }
+
+.ficha-perfil {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-4);
+  width: 100%;
+  min-height: calc(var(--tamano-avatar) + var(--espacio-5) * 2);
+  padding: var(--espacio-4);
+  border: 3px solid var(--color-line);
+  border-radius: var(--radio-lg);
+  background: var(--color-surface);
+  box-shadow: var(--sombra-pop-suave);
+  text-align: left;
+  transition: transform 80ms ease, box-shadow 80ms ease;
+}
+.ficha-perfil:active { transform: translateY(4px); box-shadow: none; }
+.ficha-perfil__texto { display: flex; flex: 1; flex-direction: column; min-width: 0; }
+.ficha-perfil__nombre {
+  overflow: hidden;
+  font-size: calc(var(--letra-boton-tamano) * 1.15);
+  line-height: var(--letra-titulo-alto);
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ficha-perfil__detalle { color: var(--color-ink-muted); }
+.ficha-perfil__estrellas { flex: none; color: var(--color-star-edge); font-size: var(--letra-boton-tamano); font-weight: 700; }
+
+/* Nuevo jugador */
+
+.crear-perfil__avatar { display: flex; justify-content: center; margin: var(--espacio-4) 0 var(--espacio-5); }
+
+.crear-perfil__etiqueta {
+  display: block;
+  margin: 0 0 var(--espacio-3);
+  padding: 0;
+  font-size: var(--letra-boton-tamano);
+  line-height: var(--letra-boton-alto);
+  font-weight: 800;
+}
+
+.campo {
+  width: 100%;
+  min-height: calc(var(--tamano-tocable-min) + var(--espacio-2));
+  padding: var(--espacio-3) var(--espacio-4);
+  border: 3px solid var(--color-line-strong);
+  border-radius: var(--radio-md);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: calc(var(--letra-boton-tamano) * 1.05);
+  font-weight: 800;
+}
+.campo:focus { border-color: var(--color-primary); outline: none; }
+
+.crear-perfil__ayuda { margin: var(--espacio-3) 0 var(--espacio-5); color: var(--color-ink-muted); }
+
+.crear-perfil__colores { margin: 0; padding: 0; border: 0; min-width: 0; }
+
+.selector-color { display: flex; justify-content: space-between; gap: var(--espacio-2); }
+.selector-color__opcion { position: relative; display: block; flex: 0 1 var(--tamano-tocable-min); aspect-ratio: 1; cursor: pointer; }
+.selector-color__opcion input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.selector-color__muestra { display: block; width: 100%; height: 100%; border-radius: var(--radio-full); background: var(--avatar); }
+.selector-color__opcion input:checked + .selector-color__muestra { box-shadow: 0 0 0 4px var(--color-bg), 0 0 0 8px var(--color-primary); }
+.selector-color__opcion input:focus-visible + .selector-color__muestra { outline: 3px solid var(--color-primary); outline-offset: 10px; }

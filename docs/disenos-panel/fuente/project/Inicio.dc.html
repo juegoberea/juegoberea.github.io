@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Panel de Berea · Inicio</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="panel.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app">
+  <nav class="side" aria-label="Menú del panel">
+    <div class="brand"><img src="/_blob/22584b7f210d10875972a485bed28500" alt=""><div><b>Berea</b><span>PANEL DE LA AUTORA</span></div></div>
+    <a class="nav on" href="Inicio.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1z"></path></svg>Inicio</a>
+    <a class="nav" href="SubirBanco.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"></path></svg>Subir banco de preguntas</a>
+    <a class="nav" href="Capitulos.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-13c-3-.5-6 0-8 1.5zM12 6v13"></path></svg>Capítulos</a>
+    <a class="nav" href="Publicar.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3L10 14M21 3l-7 18-4-7-7-4z"></path></svg>Publicar<span class="n">3</span></a>
+    <a class="nav" href="Seguridad.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"></path></svg>Seguridad</a>
+    <div class="grow"></div>
+    <div class="who"><span class="av">S</span><div><b>Sharon</b><span>autora@berea.invalid</span></div></div>
+    <a class="nav" href="Main.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4h4a1 1 0 011 1v14a1 1 0 01-1 1h-4M10 17l5-5-5-5M15 12H3"></path></svg>Salir</a>
+  </nav>
+  <main class="main">
+    <div class="wrap">
+      <div class="top">
+        <div>
+          <h1>Hola, Sharon</h1>
+          <p class="sub">Así va Patriarcas y Profetas.</p>
+        </div>
+        <div class="row">
+          <a class="btn sec" href="SubirBanco.dc.html">Subir banco de preguntas</a>
+          <a class="btn pri" href="Publicar.dc.html">Revisar y publicar</a>
+        </div>
+      </div>
+
+      <section class="card" aria-labelledby="avance">
+        <div class="row" style="justify-content: space-between">
+          <h2 id="avance">Avance del libro</h2>
+          <span class="muted" style="font-size: 15px; font-weight: 800">14 de 73 capítulos escritos</span>
+        </div>
+        <div class="bar" role="img" aria-label="10 publicados, 2 listos, 1 con advertencias, 1 con errores, 59 sin escribir">
+          <i style="width: 13.7%; background: #13803A"></i><i style="width: 2.74%; background: #1F5FD6"></i><i style="width: 1.37%; background: #F08A24"></i><i style="width: 1.37%; background: #C8283F"></i>
+        </div>
+        <div class="leg">
+          <span style="--c: #13803A">10 publicados</span>
+          <span style="--c: #1F5FD6">2 listos para publicar</span>
+          <span style="--c: #F08A24">1 con advertencias</span>
+          <span style="--c: #C8283F">1 con errores</span>
+          <span style="--c: #ECEEF3">59 sin escribir</span>
+        </div>
+      </section>
+
+      <div class="cols3">
+        <section class="card">
+          <h3>Versión que tienen los jugadores</h3>
+          <div class="kpi"><b>Versión 3</b><span>22 oct 2026 · capítulos 1 a 10</span></div>
+          <span class="st pub">Publicada y firmada</span>
+        </section>
+        <section class="card">
+          <h3>Cambios sin publicar</h3>
+          <div class="kpi"><b>3 cambios</b><span>2 capítulos nuevos · 1 pregunta corregida</span></div>
+          <a class="btn sec sm" href="Publicar.dc.html" style="align-self: flex-start">Ver cambios</a>
+        </section>
+        <section class="card">
+          <h3>Necesitan tu atención</h3>
+          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 15px; font-weight: 700">
+            <a href="Capitulos.dc.html" style="display: flex; justify-content: space-between; gap: 8px; color: #1F1B3D; text-decoration: none"><span>Cap. 13 · 2 preguntas sin cita</span><span class="st adv">Advertencia</span></a>
+            <a href="Capitulos.dc.html" style="display: flex; justify-content: space-between; gap: 8px; color: #1F1B3D; text-decoration: none"><span>Cap. 14 · 19 de 20 preguntas</span><span class="st err">Error</span></a>
+          </div>
+        </section>
+      </div>
+
+      <section class="card" aria-labelledby="actividad">
+        <h2 id="actividad">Actividad reciente</h2>
+        <div class="scroll">
+          <table class="tbl">
+            <thead><tr><th>Cuándo</th><th>Qué pasó</th><th>Detalle</th></tr></thead>
+            <tbody>
+              <tr><td class="muted">Hoy, 13:52</td><td>Corregiste una pregunta</td><td>Capítulo 4 · pregunta 10 · explicación</td></tr>
+              <tr><td class="muted">Hoy, 13:40</td><td>Subiste el banco de preguntas</td><td>Banco_Preguntas_Patriarcas_y_Profetas_4.xlsx · 14 capítulos</td></tr>
+              <tr><td class="muted">Hoy, 13:38</td><td>Entraste al panel</td><td>Windows · Chrome</td></tr>
+              <tr><td class="muted">22 oct 2026</td><td>Publicaste la versión 3</td><td>Capítulos 1 a 10 · firmada automáticamente</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

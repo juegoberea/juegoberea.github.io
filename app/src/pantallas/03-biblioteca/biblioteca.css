@@ -1,0 +1,87 @@
+/* Pantalla 3: biblioteca. */
+
+.biblioteca__perfil {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+}
+.biblioteca__perfil-texto { display: flex; flex-direction: column; min-width: 0; }
+.biblioteca__perfil-nombre {
+  overflow: hidden;
+  font-size: var(--letra-boton-tamano);
+  line-height: var(--letra-boton-alto);
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.islas { position: relative; margin-top: var(--espacio-5); }
+.islas__camino { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.islas__camino path {
+  fill: none;
+  stroke: var(--color-line);
+  stroke: color-mix(in srgb, var(--color-line) 70%, var(--color-ink-muted));
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-dasharray: 0 17;
+  opacity: 0.6;
+}
+.islas__lista { margin: 0; padding: 0; list-style: none; }
+
+.isla {
+  position: absolute;
+  width: 124px;
+  height: 124px;
+  transform: translate(-50%, -50%);
+}
+.isla--grande { width: 196px; height: 196px; }
+
+.isla--pronto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espacio-3);
+  border: 3px dashed var(--color-line);
+  border-color: color-mix(in srgb, var(--color-line) 70%, var(--color-ink-muted));
+  border-radius: var(--radio-full);
+  background: var(--color-surface-sunk);
+  text-align: center;
+}
+.isla--pronto .isla__titulo { font-size: var(--letra-etiqueta-tamano); line-height: 1.25; font-weight: 800; }
+.isla__estado { margin-top: 2px; color: var(--color-ink-muted); }
+
+.isla__boton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-1);
+  width: 100%;
+  height: 100%;
+  padding: var(--espacio-4);
+  border: 0;
+  border-radius: var(--radio-full);
+  background: var(--color-facil);
+  color: var(--color-on-color);
+  box-shadow: 0 8px 0 var(--color-facil-ink);
+  text-align: center;
+  transition: transform 80ms ease, box-shadow 80ms ease;
+}
+.isla__boton:active { transform: translateY(4px); box-shadow: 0 4px 0 var(--color-facil-ink); }
+.isla__numero { text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.85; }
+.isla--grande .isla__titulo { font-size: calc(var(--letra-boton-tamano) * 1.2); line-height: 1.15; font-weight: 900; }
+.isla__avance {
+  margin-top: var(--espacio-2);
+  padding: var(--espacio-1) var(--espacio-3);
+  border-radius: var(--radio-full);
+  background: var(--color-on-color);
+  color: var(--color-facil-ink);
+  font-weight: 800;
+  white-space: nowrap;
+}

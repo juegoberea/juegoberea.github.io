@@ -1,0 +1,45 @@
+/* Pantalla 13: ¡Terminaste el libro! */
+
+.terminado { align-items: center; text-align: center; }
+.terminado > .pantalla__pie { width: 100%; }
+.terminado .insignia { margin-top: var(--espacio-3); }
+.terminado .insignia__contenido { color: var(--color-primary); }
+.terminado__titulo { margin: var(--espacio-4) 0 0; font-size: calc(var(--letra-titulo-tamano) * 1.25); line-height: 1.15; font-weight: 900; }
+.terminado__subtitulo { margin: var(--espacio-2) 0 0; color: var(--color-ink-muted); font-weight: 700; }
+
+.certificado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: var(--espacio-5);
+  padding: var(--espacio-5) var(--espacio-4);
+  border: 4px solid var(--color-star);
+  border-radius: var(--radio-lg);
+  background: var(--color-paper);
+  box-shadow: 0 8px 0 var(--color-star-edge);
+  color: var(--color-paper-ink);
+  text-align: center;
+}
+.certificado p { margin: 0; }
+.certificado__etiqueta { margin-top: var(--espacio-3) !important; color: var(--color-star-edge); font-size: var(--letra-etiqueta-tamano); font-weight: 900; text-transform: uppercase; letter-spacing: 0.18em; }
+.certificado__reconoce { margin-top: var(--espacio-1) !important; color: var(--color-ink-muted); }
+.certificado__nombre { margin-top: var(--espacio-1) !important; font-size: calc(var(--letra-display-tamano) * 0.9); line-height: 1.1; font-weight: 900; overflow-wrap: anywhere; }
+.certificado__motivo { margin-top: var(--espacio-2) !important; }
+.certificado__datos { display: flex; justify-content: center; gap: var(--espacio-6); margin-top: var(--espacio-4); }
+.certificado__datos div { display: flex; flex-direction: column; }
+.certificado__datos strong { font-size: var(--letra-titulo-tamano); line-height: var(--letra-titulo-alto); font-weight: 900; }
+.certificado__datos span { color: var(--color-ink-muted); font-size: var(--letra-etiqueta-tamano); font-weight: 700; }
+.certificado__estrellas { color: var(--color-star-edge); }
+.certificado__fecha { margin-top: var(--espacio-4) !important; color: var(--color-ink-muted); font-size: var(--letra-etiqueta-tamano); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+
+.terminado__par { display: grid; grid-template-columns: 1fr 1fr; gap: var(--espacio-3); }
+.terminado__par .boton { padding-right: var(--espacio-2); padding-left: var(--espacio-2); }
+.boton--diario-completo { background: var(--color-avanzada-soft); color: var(--color-avanzada-ink); }
+
+/* Impresión: el certificado en la primera hoja y el diario completo a continuación. */
+.impresion-salto { display: none; }
+@media print {
+  .impresion-terminado .certificado { box-shadow: none; margin: 0 auto; max-width: 18cm; }
+  .impresion-salto { display: block; break-before: page; }
+}

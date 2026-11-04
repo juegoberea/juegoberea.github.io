@@ -1,0 +1,61 @@
+/* Pantalla 11: mi progreso y mi diario. */
+
+.progreso__cabecera { display: flex; align-items: center; gap: var(--espacio-4); }
+.progreso__titulo { margin: 0; }
+
+.progreso__datos { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--espacio-3); margin-top: var(--espacio-5); }
+.progreso__dato { display: flex; flex-direction: column; align-items: center; padding: var(--espacio-4) var(--espacio-2); text-align: center; }
+.progreso__dato strong { font-size: var(--letra-titulo-tamano); line-height: var(--letra-titulo-alto); font-weight: 900; white-space: nowrap; }
+.progreso__dato small { color: var(--color-ink-muted); font-size: 0.65em; }
+.progreso__dato span { color: var(--color-ink-muted); font-size: var(--letra-etiqueta-tamano); font-weight: 700; }
+.progreso__estrellas { color: var(--color-star-edge); }
+
+.progreso__certificado { margin-top: var(--espacio-4); }
+
+.progreso__seccion { margin-top: var(--espacio-4); padding: var(--espacio-4) var(--espacio-4) var(--espacio-5); }
+.progreso__subtitulo { margin: 0 0 var(--espacio-3); font-size: var(--letra-boton-tamano); line-height: var(--letra-boton-alto); font-weight: 800; }
+.progreso__vacio { margin: 0; }
+
+.progreso__album { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--espacio-3) var(--espacio-2); justify-items: center; }
+
+.progreso__registro { margin: 0; padding: 0; list-style: none; }
+.progreso__registro li { display: flex; justify-content: space-between; gap: var(--espacio-3); padding: var(--espacio-3) 0; border-bottom: 2px solid var(--color-line); font-weight: 600; }
+.progreso__registro li:last-child { border-bottom: 0; padding-bottom: 0; }
+.progreso__registro-valor { font-weight: 800; white-space: nowrap; }
+.progreso__registro-estrellas { color: var(--color-star-edge); letter-spacing: 0.05em; }
+
+/* Mi diario (tarjeta lila) */
+.progreso__diario {
+  margin-top: var(--espacio-4);
+  padding: var(--espacio-4) var(--espacio-4) var(--espacio-5);
+  border-radius: var(--radio-lg);
+  background: var(--color-avanzada-soft);
+}
+.progreso__diario-cabecera { display: flex; align-items: baseline; justify-content: space-between; gap: var(--espacio-3); color: var(--color-avanzada-ink); }
+.progreso__diario-cabecera h2 { margin: 0; font-size: calc(var(--letra-boton-tamano) * 1.15); font-weight: 900; }
+.progreso__diario-cabecera span { font-weight: 800; }
+.progreso__diario-ultima {
+  display: -webkit-box;
+  width: 100%;
+  margin: var(--espacio-3) 0 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  background: none;
+  color: var(--color-ink);
+  text-align: left;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.progreso__diario-vacio { margin: var(--espacio-3) 0 0; color: var(--color-avanzada-ink); }
+.progreso__diario-botones { display: grid; grid-template-columns: 1fr 1fr; gap: var(--espacio-3); margin-top: var(--espacio-4); }
+.boton--diario { color: var(--color-avanzada-ink); box-shadow: 0 4px 0 color-mix(in srgb, var(--color-avanzada) 30%, var(--color-avanzada-soft)); }
+
+/* Mi diario completo */
+.diario__cantidad { margin: 0; }
+.diario__lista { display: flex; flex-direction: column; gap: var(--espacio-3); margin: var(--espacio-5) 0 0; padding: 0; list-style: none; }
+.diario__entrada { padding: var(--espacio-4); border-radius: var(--radio-lg); background: var(--color-surface); box-shadow: var(--sombra-tarjeta); }
+.diario__entrada-cabecera { display: flex; align-items: center; justify-content: space-between; gap: var(--espacio-3); color: var(--color-avanzada-ink); }
+.diario__editar { padding: var(--espacio-1) var(--espacio-2); border: 0; background: none; color: var(--color-primary); font-weight: 800; text-decoration: underline; }
+.diario__pregunta { margin: var(--espacio-2) 0 0; font-weight: 800; }
+.diario__texto { margin: var(--espacio-2) 0 0; white-space: pre-wrap; }

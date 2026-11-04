@@ -1,0 +1,43 @@
+.bienvenida { position: relative; overflow: hidden; }
+.bienvenida__contenido { position: relative; }
+.pantalla__barra.bienvenida__barra { justify-content: flex-end; }
+
+/* Burbujas de color suave del fondo, como en el diseño 01. */
+.bienvenida__burbuja { position: absolute; border-radius: var(--radio-full); pointer-events: none; }
+.bienvenida__burbuja--1 { width: 260px; height: 260px; top: -120px; left: -120px; background: var(--color-facil-soft); }
+.bienvenida__burbuja--2 { width: 140px; height: 140px; top: 22%; right: -58px; background: var(--color-avanzada-soft); }
+.bienvenida__burbuja--3 { width: 110px; height: 110px; top: 68%; left: -48px; background: var(--color-intermedia-soft); }
+.bienvenida__burbuja--4 { width: 240px; height: 240px; bottom: -110px; right: -90px; background: var(--color-aplicacion-soft); }
+
+.bienvenida__centro {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espacio-6) 0;
+  text-align: center;
+}
+
+.bienvenida__nombre {
+  margin: var(--espacio-5) 0 0;
+  font-size: calc(var(--letra-display-tamano) * 1.7);
+  line-height: 1;
+  font-weight: var(--letra-display-peso);
+  letter-spacing: -0.01em;
+}
+.bienvenida__eslogan {
+  max-width: 18em;
+  margin: var(--espacio-3) 0 0;
+  color: var(--color-primary);
+  font-size: calc(var(--letra-boton-tamano) * 1.1);
+  line-height: 1.35;
+  font-weight: 800;
+}
+
+.bienvenida__cita { width: 100%; margin: var(--espacio-6) 0 0; padding: var(--espacio-5) var(--espacio-4); }
+.bienvenida__cita blockquote { margin: 0; }
+.bienvenida__mensaje { width: 100%; margin: var(--espacio-4) 0 0; padding: var(--espacio-4); border-radius: var(--radio-lg); background: var(--color-primary-soft); color: var(--color-primary); text-align: left; }
+.bienvenida__mensaje span { font-weight: 900; }
+.bienvenida__mensaje p { margin: var(--espacio-1) 0 0; color: var(--color-ink); white-space: pre-wrap; }
+.bienvenida__cita figcaption { margin-top: var(--espacio-2); color: var(--color-ink-muted); }

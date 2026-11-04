@@ -1,0 +1,41 @@
+{
+  "name": "berea",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Berea: trivia sin internet para lectores de la serie del Gran Conflicto. «Cada capítulo, un tesoro por descubrir.»",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build && vite build -c vite.panel.config.ts",
+    "panel:dev": "vite -c vite.panel.config.ts",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "claves:crear": "vite-node convertidor/crear-claves.ts --",
+    "contenido": "vite-node convertidor/convertir.ts",
+    "sello:crear": "vite-node convertidor/crear-sello.ts",
+    "funciones:preparar": "node supabase/preparar-funciones.mjs",
+    "convertidor:build": "vite build -c vite.convertidor.config.ts",
+    "convertidor:dev": "vite -c vite.convertidor.config.ts"
+  },
+  "dependencies": {
+    "@noble/ed25519": "^2.3.0",
+    "@supabase/supabase-js": "^2.119.0",
+    "fflate": "^0.8.3",
+    "preact": "^10.24.0",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.9.0",
+    "@types/node": "^24.19.2",
+    "fake-indexeddb": "^6.2.7",
+    "preact-render-to-string": "^6.8.2",
+    "typescript": "^5.6.0",
+    "vite": "^5.4.0",
+    "vite-plugin-pwa": "^0.21.2",
+    "vite-plugin-singlefile": "^2.3.4",
+    "vitest": "^2.1.0",
+    "workbox-window": "^7.3.0"
+  }
+}

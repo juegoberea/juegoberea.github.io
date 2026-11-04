@@ -1,0 +1,54 @@
+/* Pantalla 9: resumen de las 20 preguntas. */
+
+.resumen__cabecera { display: flex; align-items: center; gap: var(--espacio-4); }
+.resumen__titulo { margin: 0; }
+.resumen__subtitulo { margin: 0; color: var(--color-ink-muted); font-weight: 700; }
+
+.resumen__leyenda { display: flex; flex-wrap: wrap; gap: var(--espacio-2) var(--espacio-4); margin: var(--espacio-4) 0 0; padding: 0; list-style: none; color: var(--color-ink-muted); }
+.resumen__leyenda li { display: flex; align-items: center; gap: var(--espacio-2); }
+.resumen__muestra { display: inline-block; width: 18px; height: 18px; border-radius: 5px; }
+
+.resumen__ronda { margin-top: var(--espacio-4); }
+.resumen__ronda-titulo { margin: 0 0 var(--espacio-2); color: var(--ronda-ink); text-transform: uppercase; letter-spacing: 0.04em; }
+
+.resumen__grilla { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--espacio-2); }
+
+.tarjeta-pregunta {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  min-height: 44px;
+  padding: 0;
+  border: 2.5px solid transparent;
+  border-radius: var(--radio-md);
+  font-size: var(--letra-boton-tamano);
+  font-weight: 900;
+  animation: voltear 500ms ease-in-out;
+}
+.tarjeta-pregunta--correcta { background: var(--color-correcto); color: var(--color-on-color); }
+.tarjeta-pregunta--incorrecta { border-color: var(--color-incorrecto); background: var(--color-incorrecto-soft); color: var(--color-incorrecto-ink); }
+.tarjeta-pregunta--sin-respuesta { border: 2.5px dashed var(--color-tiempo); background: var(--color-tiempo-soft); color: var(--color-tiempo-ink); }
+.tarjeta-pregunta--elegida { box-shadow: 0 0 0 3px var(--color-bg), 0 0 0 6px var(--color-ink); }
+
+/* Solo la tarjeta tocada se da vuelta; las demás aparecen quietas. */
+.tarjeta-pregunta:not(.tarjeta-pregunta--elegida) { animation: none; }
+@keyframes voltear {
+  0% { transform: perspective(400px) rotateY(0deg); }
+  50% { transform: perspective(400px) rotateY(90deg) scale(0.95); }
+  100% { transform: perspective(400px) rotateY(0deg); }
+}
+
+.resumen__detalle {
+  margin-top: var(--espacio-5);
+  padding: var(--espacio-4) var(--espacio-5);
+  border: 3px solid var(--color-line);
+  border-radius: var(--radio-lg);
+  background: var(--color-surface);
+}
+.resumen__detalle-fila { display: flex; justify-content: space-between; gap: var(--espacio-3); color: var(--color-ink-muted); text-transform: uppercase; letter-spacing: 0.03em; }
+.resumen__estado { text-transform: none; letter-spacing: 0; font-weight: 800; }
+.resumen__estado--correcta { color: var(--color-correcto-ink); }
+.resumen__estado--incorrecta { color: var(--color-incorrecto-ink); }
+.resumen__estado--sin-respuesta { color: var(--color-tiempo-ink); }
+.resumen__pregunta { margin: var(--espacio-2) 0 0; font-size: var(--letra-opcion-tamano); line-height: var(--letra-opcion-alto); font-weight: 800; }
+.resumen__ayuda { margin: var(--espacio-3) 0 0; color: var(--color-ink-muted); }

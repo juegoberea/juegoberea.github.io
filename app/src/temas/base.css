@@ -1,0 +1,119 @@
+/* Estilos base. Solo usan variables del tema (ver temas/aplicar.ts): ningún color,
+   fuente ni tamaño escrito a mano, para que el tema Solemne pueda reemplazar todo. */
+
+/* Nunito, guardada dentro del juego para que funcione sin internet (SIL OFL). */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 1000;
+  src: url('/fuentes/nunito-latin-ext-wght-normal.woff2') format('woff2-variations'), url('/fuentes/nunito-latin-ext-wght-normal.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 1000;
+  src: url('/fuentes/nunito-latin-wght-normal.woff2') format('woff2-variations'), url('/fuentes/nunito-latin-wght-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--fuente);
+  font-size: var(--letra-texto-tamano);
+  line-height: var(--letra-texto-alto);
+  font-weight: var(--letra-texto-peso);
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+/* Columna central: celular a lo ancho; en PC centrada con ancho máximo. */
+.contenedor {
+  width: 100%;
+  max-width: var(--tamano-contenido-max);
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: var(--espacio-4);
+  padding-left: var(--espacio-4);
+}
+
+/* Estilos de texto del tema. */
+.t-display { font-size: var(--letra-display-tamano); line-height: var(--letra-display-alto); font-weight: var(--letra-display-peso); }
+.t-titulo { font-size: var(--letra-titulo-tamano); line-height: var(--letra-titulo-alto); font-weight: var(--letra-titulo-peso); }
+.t-boton { font-size: var(--letra-boton-tamano); line-height: var(--letra-boton-alto); font-weight: var(--letra-boton-peso); }
+.t-etiqueta { font-size: var(--letra-etiqueta-tamano); line-height: var(--letra-etiqueta-alto); font-weight: var(--letra-etiqueta-peso); }
+.t-pregunta { font-size: var(--letra-pregunta-tamano); line-height: var(--letra-pregunta-alto); font-weight: var(--letra-pregunta-peso); }
+.t-opcion { font-size: var(--letra-opcion-tamano); line-height: var(--letra-opcion-alto); font-weight: var(--letra-opcion-peso); }
+.t-texto { font-size: var(--letra-texto-tamano); line-height: var(--letra-texto-alto); font-weight: var(--letra-texto-peso); }
+.t-apagado { color: var(--color-ink-muted); }
+
+/* Colores de cada ronda. Un contenedor con .ronda-N hace que todo lo de adentro use
+   su color: --ronda (fuerte), --ronda-soft (tinte de fondo), --ronda-ink (texto) y
+   --ronda-on (texto sobre el color fuerte; solo Aplicación lo lleva oscuro). */
+.ronda-1 { --ronda: var(--color-facil); --ronda-soft: var(--color-facil-soft); --ronda-ink: var(--color-facil-ink); --ronda-on: var(--color-on-color); }
+.ronda-2 { --ronda: var(--color-intermedia); --ronda-soft: var(--color-intermedia-soft); --ronda-ink: var(--color-intermedia-ink); --ronda-on: var(--color-on-color); }
+.ronda-3 { --ronda: var(--color-avanzada); --ronda-soft: var(--color-avanzada-soft); --ronda-ink: var(--color-avanzada-ink); --ronda-on: var(--color-on-color); }
+.ronda-4 { --ronda: var(--color-aplicacion); --ronda-soft: var(--color-aplicacion-soft); --ronda-ink: var(--color-aplicacion-ink); --ronda-on: var(--color-on-aplicacion); }
+
+/* Fondo de la pantalla de pregunta: el tinte de la ronda, con cambio suave. */
+.fondo-ronda {
+  background: var(--ronda-soft, var(--color-bg));
+  transition: background-color var(--mov-cambio-ronda-fondo) ease;
+}
+
+.solo-lectores {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* «Reducir movimiento» activo en el aparato: sin latidos ni confeti, solo cambios de color. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+  .confeti {
+    display: none !important;
+  }
+}

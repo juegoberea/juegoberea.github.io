@@ -1,0 +1,74 @@
+/* Pantalla 7: cambio de ronda. Toma el color de la ronda (.ronda-N). */
+
+.cambio-ronda {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: var(--espacio-5) var(--espacio-4);
+  background: var(--ronda);
+  color: var(--ronda-on);
+  text-align: center;
+  animation: aparece-ronda var(--mov-cambio-ronda-fondo) ease-out both;
+}
+@keyframes aparece-ronda {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Aros de fondo, apenas más claros que el color de la ronda. */
+.cambio-ronda__aro {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 40px solid var(--ronda-on);
+  border-radius: var(--radio-full);
+  opacity: 0.06;
+  transform: translate(-50%, -50%);
+}
+.cambio-ronda__aro--1 { width: 560px; height: 560px; }
+.cambio-ronda__aro--2 { width: 900px; height: 900px; }
+
+.cambio-ronda__contenido { position: relative; display: flex; flex-direction: column; align-items: center; max-width: var(--tamano-contenido-max); }
+
+.cambio-ronda__numero {
+  display: grid;
+  place-items: center;
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radio-full);
+  background: var(--color-surface);
+  color: var(--ronda-ink);
+  box-shadow: 0 8px 0 var(--ronda-ink);
+  font-size: calc(var(--letra-display-tamano) * 1.6);
+  line-height: 1;
+  font-weight: 900;
+  animation: numero-ronda 600ms cubic-bezier(0.28, 0.84, 0.42, 1) both;
+}
+@keyframes numero-ronda {
+  0% { transform: scale(0.4); }
+  60% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.cambio-ronda__etiqueta { margin-top: var(--espacio-5); text-transform: uppercase; letter-spacing: 0.12em; font-size: calc(var(--letra-etiqueta-tamano) * 1.25); }
+.cambio-ronda__titulo { margin: var(--espacio-2) 0 0; font-size: var(--letra-display-tamano); line-height: var(--letra-display-alto); font-weight: var(--letra-display-peso); }
+.cambio-ronda__animo { max-width: 22em; margin: var(--espacio-3) 0 0; font-size: var(--letra-texto-tamano); line-height: var(--letra-texto-alto); }
+
+.cambio-ronda__puntos {
+  margin: var(--espacio-6) 0 0;
+  padding: var(--espacio-3) var(--espacio-6);
+  border-radius: var(--radio-full);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: var(--letra-boton-tamano);
+  font-weight: 800;
+}
+.cambio-ronda__puntos strong { color: var(--ronda-ink); font-weight: 900; }
+
+.cambio-ronda__avance { display: flex; gap: var(--espacio-3); margin: var(--espacio-5) 0 0; padding: 0; list-style: none; }
+.cambio-ronda__avance li { width: 40px; height: 8px; border-radius: var(--radio-full); background: var(--ronda-on); opacity: 0.3; }
+.cambio-ronda__avance li.hecha { opacity: 1; }
+.cambio-ronda__avance li.actual { background: var(--color-star); opacity: 1; }

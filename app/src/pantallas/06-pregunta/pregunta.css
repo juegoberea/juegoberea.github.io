@@ -1,0 +1,64 @@
+/* Pantalla 6: pregunta. El fondo y los acentos toman el color de la ronda (.ronda-N). */
+
+.jugar { min-height: 100vh; min-height: 100dvh; }
+.jugar__pantalla { padding-top: var(--espacio-4); }
+
+.jugar__estado {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  margin-top: var(--espacio-4);
+  color: var(--ronda-ink);
+  font-weight: 800;
+}
+
+/* Barra de 20 segmentos con el color de cada ronda. */
+.segmentos { display: flex; align-items: center; gap: 3px; margin: var(--espacio-2) 0 0; padding: 0; list-style: none; }
+.segmento { flex: 1; height: 8px; border-radius: var(--radio-full); background: var(--color-surface); }
+.segmento--hecho { background: var(--ronda); }
+.segmento--actual { flex: 1.6; height: 14px; border: 2.5px solid var(--color-ink); background: var(--ronda); }
+
+.jugar__pregunta { margin: var(--espacio-5) 0 var(--espacio-4); }
+/* El foco llega a la pregunta para los lectores de pantalla; no hace falta marcarlo. */
+.jugar__pregunta:focus,
+.jugar__pregunta:focus-visible { outline: none; }
+
+.jugar__opciones { display: flex; flex-direction: column; gap: var(--espacio-3); }
+
+/* Caja de retroalimentación: correcto (con explicación y cita), incorrecto (solo ánimo) o tiempo. */
+.retro { margin-top: var(--espacio-4); padding: var(--espacio-4) var(--espacio-5); border-radius: var(--radio-lg); }
+.retro p { margin: 0; }
+.retro__titulo { font-size: calc(var(--letra-boton-tamano) * 1.15); line-height: var(--letra-titulo-alto); font-weight: 900; }
+.retro__texto { margin-top: var(--espacio-1); }
+.retro__cita { margin-top: var(--espacio-2); font-size: var(--letra-etiqueta-tamano); font-weight: 800; }
+.retro--correcto { background: var(--color-correcto-soft); color: var(--color-correcto-ink); }
+.retro--incorrecto { background: var(--color-incorrecto-soft); color: var(--color-incorrecto-ink); }
+.retro--tiempo { display: flex; align-items: center; gap: var(--espacio-4); background: var(--color-tiempo-soft); color: var(--color-tiempo-ink); }
+.retro__icono {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radio-full);
+  background: var(--color-tiempo);
+  color: var(--color-on-color);
+}
+
+/* «Siguiente» queda pegado abajo, siempre a mano. */
+.jugar__pie {
+  position: sticky;
+  bottom: 0;
+  margin-top: auto;
+  padding: var(--espacio-5) 0 var(--espacio-2);
+  background: linear-gradient(to bottom, transparent, var(--ronda-soft) 40%);
+}
+
+/* Letra muy grande: menos relleno para que la pregunta y las 3 opciones entren sin
+   desplazar en un celular de 360 × 740 (diseño 06e). */
+:root[data-letra='muyGrande'] .jugar__pantalla { padding-top: var(--espacio-3); }
+:root[data-letra='muyGrande'] .jugar__estado { margin-top: var(--espacio-3); }
+:root[data-letra='muyGrande'] .jugar__pregunta { margin: var(--espacio-4) 0 var(--espacio-3); }
+:root[data-letra='muyGrande'] .jugar__opciones { gap: var(--espacio-2); }
+:root[data-letra='muyGrande'] .jugar .opcion { gap: var(--espacio-3); padding: var(--espacio-2) var(--espacio-3); }
+:root[data-letra='muyGrande'] .jugar .opcion__marca { width: 36px; height: 36px; }

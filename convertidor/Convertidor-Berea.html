@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Convertidor de Berea</title>
+    <style>
+      :root {
+        --bg: #fff8ee; --surface: #fff; --sunk: #f6eedf; --line: #e9e1d3;
+        --ink: #1f1b3d; --muted: #5c5878; --primary: #2b2575; --primary-press: #1d1856; --primary-soft: #e6e4f7;
+        --ok: #13803a; --ok-soft: #dcf7e3; --ok-ink: #0e5a28;
+        --err: #c8283f; --err-soft: #fde3e6; --err-ink: #9e1b30;
+        --warn-soft: #fdebd7; --warn-ink: #8a4300;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: var(--bg); color: var(--ink); font: 500 16px/1.5 'Segoe UI', system-ui, sans-serif; }
+      main { max-width: 820px; margin: 0 auto; padding: 32px 16px 64px; }
+      h1 { font-size: 30px; line-height: 1.2; margin: 0 0 4px; font-weight: 800; }
+      .sub { color: var(--muted); margin: 0 0 28px; }
+      .paso { background: var(--surface); border-radius: 16px; padding: 20px; margin-bottom: 16px;
+              box-shadow: 0 2px 0 var(--line), 0 6px 16px rgba(31, 27, 61, 0.06); }
+      .paso h2 { font-size: 19px; margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+      .num { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+             background: var(--primary); color: #fff; font-size: 15px; flex: none; }
+      .paso.hecho .num { background: var(--ok); }
+      .zona { border: 2px dashed #8c86a3; border-radius: 16px; padding: 28px 16px; text-align: center; cursor: pointer;
+              background: var(--sunk); transition: background 0.15s, border-color 0.15s; }
+      .zona:hover, .zona.encima { background: var(--primary-soft); border-color: var(--primary); }
+      .zona strong { display: block; font-size: 18px; }
+      .zona span { color: var(--muted); font-size: 14px; }
+      .zona input { display: none; }
+      .estado { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+                padding: 12px 16px; border-radius: 10px; font-weight: 700; }
+      .estado.ok { background: var(--ok-soft); color: var(--ok-ink); }
+      .estado.err { background: var(--err-soft); color: var(--err-ink); }
+      label.recordar { display: flex; gap: 8px; align-items: center; margin-top: 12px; color: var(--muted); font-size: 14px; }
+      button { font: inherit; font-weight: 800; border: 0; border-radius: 16px; cursor: pointer; }
+      .primario { background: var(--primary); color: #fff; padding: 14px 28px; font-size: 18px; box-shadow: 0 4px 0 var(--primary-press); }
+      .primario:active:not(:disabled) { transform: translateY(4px); box-shadow: none; }
+      .primario:disabled { background: #b9b5cc; box-shadow: none; cursor: not-allowed; }
+      .enlace { background: none; color: var(--primary); padding: 4px 8px; font-size: 14px; text-decoration: underline; }
+      .tabla { overflow-x: auto; margin-top: 12px; }
+      table { width: 100%; border-collapse: collapse; font-size: 15px; }
+      th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+      th { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.03em; }
+      td.n { text-align: right; width: 1%; white-space: nowrap; }
+      .chip { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 13px; font-weight: 700; white-space: nowrap; }
+      .chip.ok { background: var(--ok-soft); color: var(--ok-ink); }
+      .chip.err { background: var(--err-soft); color: var(--err-ink); }
+      .chip.warn { background: var(--warn-soft); color: var(--warn-ink); }
+      ul.avisos { list-style: none; padding: 0; margin: 12px 0 0; }
+      ul.avisos li { padding: 10px 14px; border-radius: 10px; margin-bottom: 8px; }
+      ul.avisos li.error { background: var(--err-soft); color: var(--err-ink); }
+      ul.avisos li.advertencia { background: var(--warn-soft); color: var(--warn-ink); }
+      .ayuda { color: var(--muted); font-size: 14px; margin: 12px 0 0; }
+      .archivos { margin: 10px 0 0; color: var(--muted); font-size: 14px; }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="./src/pagina.tsx"></script>
+  </body>
+</html>

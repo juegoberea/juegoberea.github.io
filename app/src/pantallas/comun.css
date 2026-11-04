@@ -1,0 +1,58 @@
+/* Piezas comunes a todas las pantallas. Solo variables del tema. */
+
+/* Una pantalla ocupa todo el alto; el botón principal queda abajo, como en los diseños. */
+.pantalla {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-top: var(--espacio-5);
+  padding-bottom: var(--espacio-5);
+}
+
+.pantalla__barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  min-height: var(--tamano-tocable-min);
+}
+.pantalla__barra-grupo { display: flex; align-items: center; gap: var(--espacio-3); }
+
+.pantalla__titulo { margin: var(--espacio-5) 0 var(--espacio-1); }
+.pantalla__subtitulo { margin: 0; color: var(--color-ink-muted); }
+
+/* Empuja lo que sigue hasta el fondo de la pantalla. */
+.pantalla__relleno { flex: 1; min-height: var(--espacio-5); }
+
+.pantalla__pie { display: flex; flex-direction: column; gap: var(--espacio-3); }
+
+.tarjeta {
+  border-radius: var(--radio-lg);
+  background: var(--color-surface);
+  box-shadow: var(--sombra-tarjeta);
+}
+
+.provisional { display: flex; flex-direction: column; align-items: center; gap: var(--espacio-3); text-align: center; }
+.provisional h1,
+.provisional p { margin: 0; }
+
+/* Impresión: solo sale el bloque .impresion (diario o certificado), nunca la pantalla. */
+.impresion { display: none; }
+@media print {
+  .no-imprimir,
+  .confeti { display: none !important; }
+  .impresion { display: block; }
+  /* Papel blanco: no gasta tinta en el fondo crema. */
+  html body { background: var(--color-paper); }
+}
+.impresion-diario { color: var(--color-paper-ink); font-family: var(--fuente); }
+.impresion-diario__cabecera { display: flex; align-items: center; gap: var(--espacio-4); padding-bottom: var(--espacio-4); border-bottom: 2px solid var(--color-line); }
+.impresion-diario__cabecera h1 { margin: 0; font-size: var(--letra-titulo-tamano); }
+.impresion-diario__cabecera p { margin: 0; color: var(--color-ink-muted); }
+.impresion-diario__entrada { padding: var(--espacio-4) 0; border-bottom: 1px solid var(--color-line); break-inside: avoid; }
+.impresion-diario__entrada h2 { margin: 0; font-size: var(--letra-boton-tamano); }
+.impresion-diario__pregunta { margin: var(--espacio-2) 0 0; font-style: italic; }
+.impresion-diario__texto { margin: var(--espacio-2) 0 0; white-space: pre-wrap; }
+
+.aviso-carga { margin: var(--espacio-5) 0; color: var(--color-ink-muted); text-align: center; }

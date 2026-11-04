@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Panel de Berea · Capítulos</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="panel.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app">
+  <nav class="side" aria-label="Menú del panel">
+    <div class="brand"><img src="/_blob/22584b7f210d10875972a485bed28500" alt=""><div><b>Berea</b><span>PANEL DE LA AUTORA</span></div></div>
+    <a class="nav" href="Inicio.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1z"></path></svg>Inicio</a>
+    <a class="nav" href="SubirBanco.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"></path></svg>Subir banco de preguntas</a>
+    <a class="nav on" href="Capitulos.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-13c-3-.5-6 0-8 1.5zM12 6v13"></path></svg>Capítulos</a>
+    <a class="nav" href="Publicar.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3L10 14M21 3l-7 18-4-7-7-4z"></path></svg>Publicar<span class="n">3</span></a>
+    <a class="nav" href="Seguridad.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"></path></svg>Seguridad</a>
+    <div class="grow"></div>
+    <div class="who"><span class="av">S</span><div><b>Sharon</b><span>autora@berea.invalid</span></div></div>
+    <a class="nav" href="Main.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4h4a1 1 0 011 1v14a1 1 0 01-1 1h-4M10 17l5-5-5-5M15 12H3"></path></svg>Salir</a>
+  </nav>
+  <main class="main">
+    <div class="wrap">
+      <div class="top">
+        <div>
+          <h1>Capítulos</h1>
+          <p class="sub">Patriarcas y Profetas · 14 de 73 capítulos escritos</p>
+        </div>
+        <div class="row" role="group" aria-label="Filtrar capítulos">
+          <button class="btn sm" style="background: #2B2575; color: #FFFFFF">Todos · 14</button>
+          <button class="btn line sm">Publicados · 10</button>
+          <button class="btn line sm">Listos · 2</button>
+          <button class="btn line sm">Con avisos · 2</button>
+        </div>
+      </div>
+
+      <section class="card" style="padding: 8px 12px">
+        <div class="scroll">
+          <table class="tbl">
+            <thead><tr><th>Cap.</th><th>Título</th><th>Estado</th><th>Correctas A·B·C</th><th>Celular, letra muy grande</th><th style="text-align: right">Acciones</th></tr></thead>
+            <tbody>
+              <tr><td>14</td><td><b>La destrucción de Sodoma</b></td><td><span class="st err">Borrador con errores</span></td><td class="muted">—</td><td class="muted">—</td><td style="text-align: right"><a class="btn sec sm" href="EditarPregunta.dc.html">Corregir</a></td></tr>
+              <tr><td>13</td><td><b>La prueba de la fe</b></td><td><span class="st adv">2 sin cita</span></td><td>6 · 7 · 7</td><td><span class="st pub">Entran las 20</span></td><td style="text-align: right"><a class="btn line sm" href="VistaPrevia.dc.html">Vista previa</a></td></tr>
+              <tr><td>12</td><td><b>Abraham en Canaán</b></td><td><span class="st listo">Listo para publicar</span></td><td>7 · 6 · 7</td><td><span class="st pub">Entran las 20</span></td><td style="text-align: right"><a class="btn line sm" href="VistaPrevia.dc.html">Vista previa</a></td></tr>
+              <tr><td>11</td><td><b>El llamamiento de Abraham</b></td><td><span class="st listo">Listo para publicar</span></td><td>7 · 7 · 6</td><td><span class="st pub">Entran las 20</span></td><td style="text-align: right"><a class="btn line sm" href="VistaPrevia.dc.html">Vista previa</a></td></tr>
+              <tr><td>10</td><td>La torre de Babel</td><td><span class="st pub">Publicado</span></td><td>7 · 7 · 6</td><td><span class="st pub">Entran las 20</span></td><td style="text-align: right"><a class="btn line sm" href="VistaPrevia.dc.html">Vista previa</a></td></tr>
+              <tr><td>9</td><td>La semana literal</td><td><span class="st pub">Publicado</span></td><td>7 · 7 · 6</td><td><span class="st pub">Entran las 20</span></td><td style="text-align: right"><a class="btn line sm" href="VistaPrevia.dc.html">Vista previa</a></td></tr>
+              <tr><td>8</td><td>Después del diluvio</td><td><span class="st pub">Publicado</span></td><td>7 · 7 · 6</td><td><span class="st pub">Entran las 20</span></td><td style="text-align: right"><a class="btn line sm" href="VistaPrevia.dc.html">Vista previa</a></td></tr>
+              <tr><td>7</td><td>El diluvio</td><td><span class="st pub">Publicado</span></td><td>7 · 7 · 6</td><td><span class="st pub">Entran las 20</span></td><td style="text-align: right"><a class="btn line sm" href="VistaPrevia.dc.html">Vista previa</a></td></tr>
+              <tr><td>6</td><td>Set y Enoc</td><td><span class="st pub">Publicado</span></td><td>7 · 7 · 6</td><td><span class="st pub">Entran las 20</span></td><td style="text-align: right"><a class="btn line sm" href="VistaPrevia.dc.html">Vista previa</a></td></tr>
+              <tr><td>5</td><td>Caín y Abel probados</td><td><span class="st pub">Publicado</span></td><td>7 · 7 · 6</td><td><span class="st pub">Entran las 20</span></td><td style="text-align: right"><a class="btn line sm" href="VistaPrevia.dc.html">Vista previa</a></td></tr>
+              <tr><td>4</td><td>El plan de redención</td><td><span class="st borr">Publicado · 1 corrección</span></td><td>7 · 7 · 6</td><td><span class="st pub">Entran las 20</span></td><td style="text-align: right"><a class="btn line sm" href="VistaPrevia.dc.html">Vista previa</a></td></tr>
+              <tr><td>3</td><td>La tentación y la caída</td><td><span class="st pub">Publicado</span></td><td>7 · 7 · 6</td><td><span class="st pub">Entran las 20</span></td><td style="text-align: right"><a class="btn line sm" href="VistaPrevia.dc.html">Vista previa</a></td></tr>
+              <tr><td>2</td><td>La creación</td><td><span class="st pub">Publicado</span></td><td>7 · 7 · 6</td><td><span class="st pub">Entran las 20</span></td><td style="text-align: right"><a class="btn line sm" href="VistaPrevia.dc.html">Vista previa</a></td></tr>
+              <tr><td>1</td><td>El origen del mal</td><td><span class="st pub">Publicado</span></td><td>7 · 7 · 6</td><td><span class="st pub">Entran las 20</span></td><td style="text-align: right"><a class="btn line sm" href="VistaPrevia.dc.html">Vista previa</a></td></tr>
+              <tr><td class="muted">15 a 73</td><td class="muted">Sin escribir</td><td><span class="st vacio">59 capítulos</span></td><td class="muted">—</td><td class="muted">—</td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

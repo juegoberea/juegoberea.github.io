@@ -1,0 +1,25 @@
+/* Solo para el catálogo de componentes. También usa solo variables del tema. */
+
+.cat { padding-top: var(--espacio-6); padding-bottom: var(--espacio-7); }
+.cat-cabecera { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--espacio-4); }
+.cat-cabecera h1 { margin: 0 0 var(--espacio-2); }
+.cat-cabecera p { margin: 0; }
+
+.cat-seccion { margin-top: var(--espacio-6); }
+.cat-seccion__titulo { margin: 0 0 var(--espacio-3); text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-ink-muted); }
+
+.cat-fila { display: flex; flex-wrap: wrap; align-items: center; gap: var(--espacio-3); margin-bottom: var(--espacio-3); }
+.cat-fila--espaciada { justify-content: space-between; }
+.cat-fila--paradas { gap: var(--espacio-6); padding: var(--espacio-4); }
+.cat-pila { display: flex; flex-direction: column; gap: var(--espacio-3); }
+
+.cat-pregunta { padding: var(--espacio-4); margin-bottom: var(--espacio-4); border-radius: var(--radio-lg); }
+.cat-pregunta .t-pregunta { margin: var(--espacio-4) 0; }
+.cat-pregunta > .boton { margin-top: var(--espacio-4); }
+
+.cat-sin-boton { padding: 0; border: 0; background: none; }
+
+.cat-colores { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: var(--espacio-3); }
+.cat-color { display: flex; flex-direction: column; gap: 2px; }
+.cat-color__muestra { height: 40px; border-radius: var(--radio-sm); border: 1px solid var(--color-line); }
+.cat-color__valor { font-size: 12px; color: var(--color-ink-muted); font-family: ui-monospace, monospace; }

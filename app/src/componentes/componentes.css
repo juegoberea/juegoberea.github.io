@@ -1,0 +1,351 @@
+/* Componentes de Berea. Solo variables del tema: nada de colores, fuentes ni tamaños
+   escritos a mano. Cuando hace falta un tono intermedio se mezcla a partir de los colores
+   del tema con color-mix (con un valor de respaldo para navegadores antiguos). */
+
+/* ---------- Botón ---------- */
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-2);
+  min-height: var(--tamano-tocable-min);
+  padding: var(--espacio-3) var(--espacio-5);
+  border: 0;
+  border-radius: var(--radio-lg);
+  font-size: var(--letra-boton-tamano);
+  line-height: var(--letra-boton-alto);
+  font-weight: var(--letra-boton-peso);
+  text-align: center;
+  transition: transform 80ms ease, box-shadow 80ms ease;
+}
+.boton--ancho { width: 100%; }
+.boton__icono { display: inline-flex; }
+
+.boton--primario { background: var(--color-primary); color: var(--color-on-primary); box-shadow: var(--sombra-pop); }
+.boton--secundario { background: var(--color-primary-soft); color: var(--color-primary); box-shadow: var(--sombra-pop-suave); }
+.boton--blanco { background: var(--color-surface); color: var(--color-primary); box-shadow: var(--sombra-pop-suave); }
+
+/* Al tocarlo se hunde 4 px: baja lo mismo que mide su borde inferior. */
+.boton:active:not(:disabled) { transform: translateY(4px); box-shadow: none; }
+.boton:disabled { opacity: 0.5; }
+
+.boton--late { animation: late var(--mov-late) ease-in-out infinite; }
+.boton--late:active { animation: none; }
+
+@keyframes late {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+/* ---------- Botón con icono (volver, ajustes, silencio) ---------- */
+
+.boton-icono {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--tamano-tocable-min);
+  height: var(--tamano-tocable-min);
+  padding: 0;
+  border: 3px solid var(--color-line);
+  border: 3px solid color-mix(in srgb, var(--ronda, var(--color-line)) 25%, var(--color-line));
+  border-radius: var(--radio-full);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  transition: transform 80ms ease;
+}
+.boton-icono:active { transform: scale(0.94); }
+
+/* ---------- Opción A / B / C ---------- */
+
+.opcion {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-4);
+  width: 100%;
+  min-height: var(--tamano-tocable-min);
+  padding: var(--espacio-4);
+  border: 3px solid var(--color-line);
+  border-color: color-mix(in srgb, var(--ronda, var(--color-line-strong)) 22%, var(--color-surface));
+  border-radius: var(--radio-lg);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  box-shadow: 0 4px 0 var(--color-line);
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--ronda, var(--color-line-strong)) 28%, var(--color-surface));
+  text-align: left;
+  transition: background-color 150ms ease, opacity 150ms ease, transform 80ms ease;
+}
+.opcion:disabled { cursor: default; }
+.opcion--esperando:active { transform: translateY(2px) scale(0.98); box-shadow: none; }
+
+.opcion__marca {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radio-full);
+  background: var(--ronda-soft, var(--color-primary-soft));
+  color: var(--ronda-ink, var(--color-primary));
+  font-size: var(--letra-boton-tamano);
+  font-weight: 900;
+}
+.opcion__texto { flex: 1; min-width: 0; }
+
+.opcion__puntos {
+  flex: none;
+  padding: var(--espacio-1) var(--espacio-3);
+  border-radius: var(--radio-full);
+  background: var(--color-on-color);
+  color: var(--color-correcto-ink);
+  font-size: var(--letra-boton-tamano);
+  line-height: var(--letra-boton-alto);
+  font-weight: 900;
+}
+.opcion__aviso {
+  flex: none;
+  font-size: var(--letra-etiqueta-tamano);
+  line-height: var(--letra-etiqueta-alto);
+  font-weight: 800;
+}
+
+.opcion--correcta,
+.opcion--incorrecta {
+  border-color: transparent;
+  box-shadow: none;
+  color: var(--color-on-color);
+  animation: opcion-tocada var(--mov-opcion-tocada) ease-out;
+}
+.opcion--correcta { background: var(--color-correcto); }
+.opcion--incorrecta { background: var(--color-incorrecto); }
+.opcion--correcta .opcion__marca,
+.opcion--incorrecta .opcion__marca {
+  background: var(--color-on-color);
+  background: color-mix(in srgb, var(--color-on-color) 25%, transparent);
+  color: var(--color-on-color);
+}
+.opcion--correcta .opcion__marca { color: var(--color-on-color); }
+
+.opcion--atenuada { opacity: 0.55; box-shadow: none; }
+
+@keyframes opcion-tocada {
+  0% { transform: scale(0.96); }
+  60% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- Reloj circular ---------- */
+
+.reloj--circular {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--tamano-reloj);
+  height: var(--tamano-reloj);
+}
+.reloj--circular svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.reloj__fondo { fill: var(--color-surface); }
+.reloj__arco {
+  fill: none;
+  stroke: var(--ronda, var(--color-primary));
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear, stroke 300ms ease, opacity 300ms ease;
+}
+.reloj__numero {
+  position: relative;
+  color: var(--color-ink);
+  font-size: calc(var(--tamano-reloj) * 0.38);
+  line-height: 1;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Últimos 5 segundos: rojo y late. */
+.reloj--urgente .reloj__arco { stroke: var(--color-incorrecto); }
+.reloj--urgente .reloj__numero { color: var(--color-incorrecto); }
+.reloj--urgente { animation: reloj-late var(--mov-reloj-late) ease-in-out infinite; }
+
+/* Ya respondida: el reloj queda quieto y apagado. */
+.reloj--detenido .reloj__arco { opacity: 0.55; }
+.reloj--detenido .reloj__numero { color: var(--color-ink-muted); }
+
+/* Se acabó el tiempo. */
+.reloj--agotado .reloj__fondo { fill: var(--color-tiempo-soft); }
+.reloj--agotado .reloj__arco { opacity: 0; }
+.reloj--agotado .reloj__numero { color: var(--color-tiempo-ink); }
+
+@keyframes reloj-late {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+/* ---------- Reloj en línea (para el tema Solemne) ---------- */
+
+.reloj--linea { display: flex; align-items: center; gap: var(--espacio-3); width: 100%; }
+.reloj--linea .reloj__numero { font-size: var(--letra-boton-tamano); min-width: 2ch; text-align: right; }
+.reloj__pista { flex: 1; height: 4px; border-radius: var(--radio-full); background: var(--color-line); overflow: hidden; }
+.reloj__avance { display: block; height: 100%; background: var(--color-accent); transition: width 1s linear; }
+.reloj--linea.reloj--urgente .reloj__avance { background: var(--color-incorrecto); }
+.reloj--linea.reloj--urgente { animation: none; }
+
+/* ---------- Estrellas ---------- */
+
+.estrellas { display: inline-flex; align-items: center; gap: 2px; }
+.estrellas--grande { gap: var(--espacio-3); }
+.estrella { display: block; width: 22px; height: 22px; }
+.estrellas--grande .estrella { width: 64px; height: 64px; }
+.estrella polygon { fill: var(--color-star-empty); }
+.estrellas--chica .estrella--ganada polygon { fill: var(--color-star-edge); }
+.estrellas--grande .estrella--ganada polygon {
+  fill: var(--color-star);
+  stroke: var(--color-star-edge);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+}
+.estrellas--animar .estrella--ganada { animation: estrella-aparece var(--mov-estrella) ease-out both; }
+
+@keyframes estrella-aparece {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- Insignia dentada ---------- */
+
+.insignia { position: relative; display: inline-grid; place-items: center; flex: none; }
+.insignia > svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.insignia__borde { fill: var(--color-star); stroke: var(--color-star-edge); stroke-width: 4; stroke-linejoin: round; }
+.insignia__centro { fill: var(--color-paper); }
+.insignia__contenido { position: relative; display: inline-flex; color: var(--color-paper-ink); font-weight: 900; line-height: 1; }
+
+.insignia--por-ganar .insignia__borde {
+  fill: var(--color-star-empty);
+  stroke: var(--color-line-strong);
+  stroke: color-mix(in srgb, var(--color-star-empty) 65%, var(--color-ink-muted));
+}
+.insignia--por-ganar .insignia__centro { fill: var(--color-surface-sunk); }
+.insignia--por-ganar .insignia__contenido { color: var(--color-ink-muted); }
+
+.insignia--brillar > svg { animation: insignia-brillo var(--mov-insignia) ease-in-out 2; }
+
+@keyframes insignia-brillo {
+  0%, 100% { filter: drop-shadow(0 0 0 transparent); }
+  50% { filter: drop-shadow(0 0 14px var(--color-star)); }
+}
+
+/* ---------- Avatar ---------- */
+
+.avatar {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--tamano-avatar);
+  height: var(--tamano-avatar);
+  border-radius: var(--radio-full);
+  background: var(--avatar);
+  color: var(--avatar-texto);
+  font-size: calc(var(--tamano-avatar) * 0.42);
+  line-height: 1;
+  font-weight: 900;
+}
+.avatar--chico { width: 40px; height: 40px; font-size: 17px; }
+.avatar--grande {
+  width: calc(var(--tamano-avatar) * 2);
+  height: calc(var(--tamano-avatar) * 2);
+  font-size: calc(var(--tamano-avatar) * 0.95);
+  box-shadow: inset 0 -8px 0 color-mix(in srgb, var(--avatar) 78%, var(--color-ink));
+}
+
+/* ---------- Chip de ronda ---------- */
+
+.chip-ronda {
+  display: inline-block;
+  padding: var(--espacio-2) var(--espacio-4);
+  border-radius: var(--radio-sm);
+  background: var(--ronda);
+  color: var(--ronda-on);
+  white-space: nowrap;
+}
+
+/* ---------- Parada del mapa ---------- */
+
+.parada {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--tamano-parada-mapa);
+  height: var(--tamano-parada-mapa);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radio-full);
+  font-size: var(--letra-titulo-tamano);
+  font-weight: 900;
+}
+.parada--aprobada { background: var(--color-facil); color: var(--color-on-color); box-shadow: 0 6px 0 var(--color-facil-ink); }
+.parada--aprobada:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--color-facil-ink); }
+.parada--disponible {
+  width: calc(var(--tamano-parada-mapa) * 1.17);
+  height: calc(var(--tamano-parada-mapa) * 1.17);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: calc(var(--letra-titulo-tamano) * 1.2);
+  animation: halo var(--mov-parada) ease-out infinite;
+}
+.parada--bloqueada { background: var(--color-surface-sunk); color: var(--color-line-strong); }
+
+@keyframes halo {
+  0% { box-shadow: 0 0 0 0 var(--color-primary-soft); }
+  70%, 100% { box-shadow: 0 0 0 18px transparent; }
+}
+
+/* ---------- Interruptor ---------- */
+
+.interruptor {
+  position: relative;
+  flex: none;
+  width: 60px;
+  height: 34px;
+  padding: 0;
+  border: 3px solid var(--color-line-strong);
+  border-radius: var(--radio-full);
+  background: var(--color-surface-sunk);
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+.interruptor__perilla {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radio-full);
+  background: var(--color-line-strong);
+  transition: transform 180ms ease, background-color 180ms ease;
+}
+.interruptor--encendido { border-color: var(--color-correcto); background: var(--color-correcto); }
+.interruptor--encendido .interruptor__perilla { background: var(--color-on-color); transform: translateX(26px); }
+.interruptor:disabled { opacity: 0.5; }
+
+/* ---------- Logo ---------- */
+
+.logo { display: block; flex: none; }
+.logo__tapa-izq { fill: var(--color-facil); }
+.logo__tapa-der { fill: var(--color-intermedia); }
+.logo__hoja-izq { fill: var(--color-avanzada); }
+.logo__hoja-der { fill: var(--color-aplicacion); }
+.logo__estrella { fill: var(--color-star); stroke: var(--color-star-edge); stroke-width: 1.6; stroke-linejoin: round; }
+
+/* ---------- Confeti ---------- */
+
+.confeti { position: fixed; inset: 0; z-index: 50; overflow: hidden; pointer-events: none; }
+.confeti__pieza { position: absolute; top: -24px; display: block; animation-name: confeti-cae; animation-timing-function: ease-in; animation-fill-mode: both; }
+.confeti__pieza--tira { width: 9px; height: 18px; border-radius: 3px; }
+.confeti__pieza--punto { width: 11px; height: 11px; border-radius: var(--radio-full); }
+
+@keyframes confeti-cae {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translate(var(--deriva), 105vh) rotate(var(--giro)); opacity: 0; }
+}
