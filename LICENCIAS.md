@@ -17,4 +17,6 @@ Revisado en la Fase 9 (2026-11-04): el juego no usa ningún archivo de sonido, m
 | noble-ed25519 | Biblioteca de código: firma del contenido (juego y convertidor) | (dependencia) | Paul Miller | MIT | https://github.com/paulmillr/noble-ed25519 |
 | fflate | Biblioteca de código: compresión del contenido (juego y convertidor) | (dependencia) | Arjun Barrett | MIT | https://github.com/101arrowz/fflate |
 | Workbox | Biblioteca de código: funcionamiento sin internet (service worker del juego) | `dist/sw.js`, `dist/workbox-*.js` (generados) | Google y colaboradores | MIT | https://github.com/GoogleChrome/workbox |
+| qrcode-generator | Biblioteca de código: cuadro para escanear al activar el código de 6 números (solo panel) | (dependencia) | Kazuhiko Arase | MIT | https://github.com/kazuhikoarase/qrcode-generator |
+| Supabase JS | Biblioteca de código: conexión del panel con Supabase (solo panel) | (dependencia) | Supabase | MIT | https://github.com/supabase/supabase-js |
 | SheetJS Community Edition | Biblioteca de código: lectura del Excel (solo convertidor) | (dependencia) | SheetJS LLC | Apache 2.0 | https://sheetjs.com |

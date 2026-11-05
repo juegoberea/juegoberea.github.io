@@ -44,6 +44,14 @@ a { color: var(--color-primary); }
 .qr { width: 184px; height: 184px; padding: 8px; border: 2px solid var(--color-line); border-radius: var(--radio-md); background: var(--color-paper); }
 .clave-secreta { font-variant-numeric: tabular-nums; font-size: 15px; font-weight: 700; letter-spacing: .08em; word-break: break-all; }
 
+/* Página «Código de Berea» del celular */
+.codigo-grande { padding: 16px 0; border: 0; border-radius: var(--radio-lg); background: var(--color-primary-soft); color: var(--color-primary); font-size: 52px; line-height: 60px; font-weight: 900; letter-spacing: .08em; font-variant-numeric: tabular-nums; }
+.codigo-tiempo { height: 8px; overflow: hidden; border-radius: var(--radio-full); background: var(--color-surface-sunk); }
+.codigo-tiempo i { display: block; height: 100%; background: var(--color-primary); transition: width 1s linear; }
+.qr-doble { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 16px; }
+.qr-otro { font-size: 13px; }
+.enlace { align-self: flex-start; padding: 0; border: 0; background: none; color: var(--color-primary); font-weight: 800; text-align: left; text-decoration: underline; }
+
 .codigos-lista { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
 .codigos-lista li { padding: 12px; border-radius: 12px; background: var(--color-surface-sunk); text-align: center; font-variant-numeric: tabular-nums; font-size: 18px; font-weight: 700; letter-spacing: .06em; }
 

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'preact/hooks';
 import { leerDatos, type DatosPanel } from './datos';
 import { resumenLibro } from './estados';
 import { Marco } from './Marco';
+import { AUTORA_MUESTRA, enMuestra } from './muestra';
 import { Activar, Codigo, CodigosNuevos, Entrar, Recuperar } from './pantallas/Acceso';
 import { Capitulos } from './pantallas/Capitulos';
 import { EditarPregunta } from './pantallas/EditarPregunta';
@@ -38,7 +39,10 @@ function Pantalla({ ruta, autora, datos, recargar }: { ruta: RutaPanel; autora: 
 }
 
 export function Panel() {
-  const [fase, setFase] = useState<Fase>(configurado ? { fase: 'cargando' } : { fase: 'fuera', error: t('errores.configuracion') });
+  const [fase, setFase] = useState<Fase>(
+    enMuestra ? { fase: 'dentro', autora: AUTORA_MUESTRA }
+      : configurado ? { fase: 'cargando' } : { fase: 'fuera', error: t('errores.configuracion') },
+  );
   const [ruta, setRuta] = useState<RutaPanel>(() => leerRutaPanel(location.hash));
   const [datos, setDatos] = useState<DatosPanel | null>(null);
   const [errorDatos, setErrorDatos] = useState('');
@@ -52,7 +56,7 @@ export function Panel() {
   }, []);
 
   useEffect(() => {
-    if (configurado) seguir(faseActual);
+    if (configurado && !enMuestra) seguir(faseActual);
   }, [seguir]);
 
   useEffect(() => {

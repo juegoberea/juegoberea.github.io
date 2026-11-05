@@ -18,7 +18,8 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       // vista.html: la pantalla de pregunta del juego, dentro de un «celular» (P3).
-      input: { panel: 'panel/index.html', vista: 'panel/vista.html' },
+      // codigo.html: el código de 6 números en el celular de la autora, sin instalar nada.
+      input: { panel: 'panel/index.html', vista: 'panel/vista.html', codigo: 'panel/codigo.html' },
     },
     target: ['es2020', 'chrome90', 'edge90', 'safari14'],
     // El panel lo usa solo la autora en su PC: el lector de Excel y Supabase pesan, y está bien.

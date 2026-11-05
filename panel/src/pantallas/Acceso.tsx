@@ -2,7 +2,8 @@
 // hacen falta: activar el código la primera vez, usar un código de recuperación y ver los códigos nuevos.
 
 import type { ComponentChildren } from 'preact';
-import { useState } from 'preact/hooks';
+import { useMemo, useState } from 'preact/hooks';
+import qrcode from 'qrcode-generator';
 import { Logo } from '../../../app/src/componentes/Logo';
 import { Digitos } from '../componentes/Digitos';
 import { IconoCandado, IconoCelular, IconoLlave } from '../iconos';
@@ -69,10 +70,10 @@ export function Codigo({ fase, seguir, alRecuperar }: { fase: Extract<Fase, { fa
   const [codigo, setCodigo] = useState('');
   const [ocupado, setOcupado] = useState(false);
 
-  async function confirmar() {
-    if (ocupado || codigo.length !== 6) return;
+  async function confirmar(escrito = codigo) {
+    if (ocupado || escrito.length !== 6) return;
     setOcupado(true);
-    await seguir(() => confirmarCodigo(fase, codigo));
+    await seguir(() => confirmarCodigo(fase, escrito));
     setCodigo('');
     setOcupado(false);
   }
@@ -86,7 +87,7 @@ export function Codigo({ fase, seguir, alRecuperar }: { fase: Extract<Fase, { fa
       </div>
       <Digitos valor={codigo} alCambiar={setCodigo} alCompletar={confirmar} />
       <Error texto={fase.error} />
-      <button class="btn pri grande" disabled={ocupado || codigo.length !== 6} onClick={confirmar}>{t('codigo.confirmar')}</button>
+      <button class="btn pri grande" disabled={ocupado || codigo.length !== 6} onClick={() => confirmar()}>{t('codigo.confirmar')}</button>
       <div class="acceso__enlaces">
         <button onClick={() => seguir(salir)}>{t('codigo.volver')}</button>
         <button onClick={alRecuperar}>{t('codigo.recuperacion')}</button>
@@ -95,14 +96,25 @@ export function Codigo({ fase, seguir, alRecuperar }: { fase: Extract<Fase, { fa
   );
 }
 
+/** Cuadro (QR) que abre «Código de Berea» en el celular con la clave después de «#» (no viaja a ningún servidor). */
+function cuadroCodigoBerea(clave: string): string {
+  const direccion = new URL(`codigo.html#k=${clave}`, location.href).href;
+  const qr = qrcode(0, 'M');
+  qr.addData(direccion);
+  qr.make();
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(qr.createSvgTag({ cellSize: 5, margin: 2, scalable: true }))}`;
+}
+
 export function Activar({ fase, seguir }: { fase: Extract<Fase, { fase: 'activar' }>; seguir: Seguir }) {
   const [codigo, setCodigo] = useState('');
   const [ocupado, setOcupado] = useState(false);
+  const [conAplicacion, setConAplicacion] = useState(false);
+  const cuadro = useMemo(() => cuadroCodigoBerea(fase.clave), [fase.clave]);
 
-  async function activar() {
-    if (ocupado || codigo.length !== 6) return;
+  async function activar(escrito = codigo) {
+    if (ocupado || escrito.length !== 6) return;
     setOcupado(true);
-    await seguir(() => confirmarCodigo(fase, codigo));
+    await seguir(() => confirmarCodigo(fase, escrito));
     setCodigo('');
     setOcupado(false);
   }
@@ -118,10 +130,17 @@ export function Activar({ fase, seguir }: { fase: Extract<Fase, { fase: 'activar
         <li><div class="pasos__contenido">{t('activar.paso1')}</div></li>
         <li>
           <div class="pasos__contenido">
-            {t('activar.paso2')}
-            <img class="qr" src={fase.qr} alt={t('activar.qr')} />
-            <span class="hint">{t('activar.clave')}</span>
-            <span class="clave-secreta">{fase.clave.replace(/(.{4})/g, '$1 ').trim()}</span>
+            {conAplicacion ? t('activar.paso2Aplicacion') : t('activar.paso2')}
+            <img class="qr" src={conAplicacion ? fase.qr : cuadro} alt={t('activar.qr')} />
+            <button type="button" class="enlace qr-otro" onClick={() => setConAplicacion(!conAplicacion)}>
+              {conAplicacion ? t('activar.sinAplicacion') : t('activar.conAplicacion')}
+            </button>
+            {conAplicacion && (
+              <>
+                <span class="hint">{t('activar.clave')}</span>
+                <span class="clave-secreta">{fase.clave.replace(/(.{4})/g, '$1 ').trim()}</span>
+              </>
+            )}
           </div>
         </li>
         <li>
@@ -132,7 +151,7 @@ export function Activar({ fase, seguir }: { fase: Extract<Fase, { fase: 'activar
         </li>
       </ol>
       <Error texto={fase.error} />
-      <button class="btn pri grande" disabled={ocupado || codigo.length !== 6} onClick={activar}>{t('activar.activar')}</button>
+      <button class="btn pri grande" disabled={ocupado || codigo.length !== 6} onClick={() => activar()}>{t('activar.activar')}</button>
       <div class="acceso__enlaces">
         <button onClick={() => seguir(salir)}>{t('codigo.volver')}</button>
       </div>

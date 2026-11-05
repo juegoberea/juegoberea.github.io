@@ -7,6 +7,8 @@ import {
   correoDeUsuario, describirCapitulos, describirNavegador, estadoCapitulo, fechaCorta, fechaDia,
   necesitanAtencion, resumenLibro, type FilaCapitulo,
 } from '../panel/src/estados';
+import { abrirConPin, cerrarConPin, esperaTrasFallos, pinFacil } from '../panel/src/compartido/pin';
+import { codigoDelMomento, deBase32, segundosRestantes } from '../panel/src/compartido/totp';
 import { t } from '../panel/src/textos';
 
 const PANEL = resolve(__dirname, '../panel/src');
@@ -102,6 +104,46 @@ describe('fechas y textos del panel', () => {
       for (const [, nombre] of texto.matchAll(/var\((--[\w-]+)/g)) if (!definidas.has(nombre) && !RONDA.has(nombre)) problemas.push(`${ruta}: ${nombre}`);
     }
     expect(problemas).toEqual([]);
+  });
+});
+
+describe('Código de Berea (TOTP en el celular)', () => {
+  it('da los mismos códigos que el estándar RFC 6238', async () => {
+    // Clave de prueba del estándar: «12345678901234567890» en ASCII.
+    const clave = new TextEncoder().encode('12345678901234567890');
+    expect(await codigoDelMomento(clave, 59_000, 8)).toBe('94287082');
+    expect(await codigoDelMomento(clave, 1_111_111_109_000, 8)).toBe('07081804');
+    expect(await codigoDelMomento(clave, 2_000_000_000_000, 8)).toBe('69279037');
+  });
+
+  it('lee la clave en base32 como la da Supabase', () => {
+    expect([...deBase32('GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ')]).toEqual([...new TextEncoder().encode('12345678901234567890')]);
+    expect(() => deBase32('no válida!')).toThrow();
+  });
+
+  it('cuenta los segundos hasta el próximo código', () => {
+    expect(segundosRestantes(0)).toBe(30);
+    expect(segundosRestantes(29_500)).toBe(1);
+  });
+});
+
+describe('PIN de «Código de Berea»', () => {
+  it('solo abre la clave con el PIN correcto', async () => {
+    const caja = await cerrarConPin('GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ', '2580');
+    expect(JSON.stringify(caja)).not.toContain('GEZDGNBV');
+    expect(await abrirConPin(caja, '2580')).toBe('GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ');
+    expect(await abrirConPin(caja, '2581')).toBeNull();
+  });
+
+  it('rechaza los PIN fáciles de adivinar', () => {
+    for (const pin of ['0000', '7777', '1234', '6789', '4321', '9876']) expect(pinFacil(pin)).toBe(true);
+    for (const pin of ['2580', '1357', '1243', '9035']) expect(pinFacil(pin)).toBe(false);
+  });
+
+  it('hace esperar 5 minutos cada 5 fallos', () => {
+    expect([1, 2, 3, 4].map(esperaTrasFallos)).toEqual([0, 0, 0, 0]);
+    expect(esperaTrasFallos(5)).toBe(300_000);
+    expect(esperaTrasFallos(10)).toBe(300_000);
   });
 });
 

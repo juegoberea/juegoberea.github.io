@@ -3,6 +3,7 @@
 
 import type { AuthError } from '@supabase/supabase-js';
 import { correoDeUsuario, describirNavegador } from './estados';
+import { enMuestra } from './muestra';
 import { db } from './supabase';
 import { t } from './textos';
 
@@ -41,6 +42,7 @@ async function autoraActual(): Promise<Autora> {
 
 /** Anota en el registro de actividad (solo funciona con la sesión completa). */
 export async function anotar(accion: string, detalle = ''): Promise<void> {
+  if (enMuestra) return;
   await db().from('registro').insert({ accion, detalle, navegador: describirNavegador(navigator.userAgent) });
 }
 

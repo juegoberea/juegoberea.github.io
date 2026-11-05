@@ -8,6 +8,7 @@ import { execFileSync } from 'node:child_process';
 import { createHash, createHmac } from 'node:crypto';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import { isDeepStrictEqual } from 'node:util';
 import { CLAVE_CIFRADO, CLAVE_PUBLICA } from '../app/src/contenido/claves';
 import { aHex, deBase64, deHex } from '../app/src/contenido/codificacion';
 import { abrirContenido, empaquetarContenido } from '../app/src/contenido/formato';
@@ -203,7 +204,7 @@ try {
   const r2 = await funcion(autora, 'publicar', { volverA: 1 });
   comprobar('volver a la versión 1 la publica como versión 3', !r2.error && r2.data?.numero === 3, r2.error ?? '');
   const pub3 = await bajarPublicado();
-  comprobar('la versión 3 tiene el contenido de la 1 con un número mayor que la 2', JSON.stringify(pub3.contenido?.libros) === JSON.stringify(v1.libros) && (pub3.contenido?.version ?? 0) > (pub2.contenido?.version ?? 0));
+  comprobar('la versión 3 tiene el contenido de la 1 con un número mayor que la 2', isDeepStrictEqual(pub3.contenido?.libros, v1.libros) && (pub3.contenido?.version ?? 0) > (pub2.contenido?.version ?? 0), `versión 3: ${pub3.contenido?.version} · versión 2: ${pub2.contenido?.version}`);
   const alterado = pub3.bytes.slice();
   alterado[alterado.length - 5] ^= 1;
   const abierto = await abrirContenido(alterado, { cifrado: deBase64(CLAVE_CIFRADO), firmaPublica: deHex(CLAVE_PUBLICA) }).then(() => true, () => false);
@@ -263,16 +264,16 @@ try {
   await admin.auth.admin.updateUserById(AUTORA, { password: FRASE, email: 'sharon@berea.invalid', email_confirm: true });
   const retirar = await ok('retirar');
   const tras = await fetch(`${URL_CONTENIDO}?buscar=${Date.now()}`, { cache: 'no-store' });
-  comprobar('«retirar» quita el contenido publicado (el juego sigue con el que tiene)', !retirar.r.error && tras.status >= 400);
+  comprobar('«retirar» quita el contenido publicado (el juego sigue con el que tiene)', !retirar.r.error && tras.status >= 400, retirar.r.error ?? `respuesta ${tras.status}`);
   const borrarLibro = await ok('borrar_libro');
   const { count: quedanLibro } = await admin.from('capitulos').select('*', { count: 'exact', head: true }).eq('libro_id', LIBRO);
-  comprobar('«borrar_libro» borra los capítulos del libro', !borrarLibro.r.error && quedanLibro === 0);
+  comprobar('«borrar_libro» borra los capítulos del libro', !borrarLibro.r.error && quedanLibro === 0, borrarLibro.r.error ?? `quedan ${quedanLibro}`);
   await importarBanco();
   const borrarBanco = await ok('borrar_banco');
   const { count: quedanBanco } = await admin.from('capitulos').select('*', { count: 'exact', head: true });
-  comprobar('«borrar_banco» borra todo el banco', !borrarBanco.r.error && quedanBanco === 0);
+  comprobar('«borrar_banco» borra todo el banco', !borrarBanco.r.error && quedanBanco === 0, borrarBanco.r.error ?? `quedan ${quedanBanco}`);
   const { data: registro } = await admin.from('registro').select('accion, resultado').eq('accion', 'accion_delicada');
-  comprobar('cada acción delicada, intentada o hecha, queda en el registro', (registro?.filter((r) => r.resultado === 'rechazado').length ?? 0) >= 50 && (registro?.filter((r) => r.resultado === 'hecho').length ?? 0) >= 9);
+  comprobar('cada acción delicada, intentada o hecha, queda en el registro', (registro?.filter((r) => r.resultado === 'rechazado').length ?? 0) >= 50 && (registro?.filter((r) => r.resultado === 'hecho').length ?? 0) >= 9, `rechazadas ${registro?.filter((r) => r.resultado === 'rechazado').length} · hechas ${registro?.filter((r) => r.resultado === 'hecho').length}`);
 } finally {
   // ---------- 8. Dejar todo limpio para la autora ----------
   await limpiar();

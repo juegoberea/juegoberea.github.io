@@ -305,6 +305,8 @@ Por lo tanto: «Borrador con errores» = errores; «Con advertencias» = adverte
 - **Límites honestos:** «Crear una llave de firma nueva» crea y descarga la llave, pero no la activa: para eso el programador debe ponerla como secreto y publicar el juego con su parte pública (si no, el juego rechazaría todo lo nuevo). «Pasar el proyecto» queda anotado y muestra los pasos (la transferencia se hace en supabase.com y GitHub).
 - Guía para la autora: `docs/panel-guia.md`.
 
+**«Código de Berea» en el celular (2026-11-04, pedido del usuario: «solo apretar Escanear»):** el cuadro de activación ya no es para una aplicación, sino que abre `panel/codigo.html#k=CLAVE` con el botón «Escanear código QR» de Android (o la cámara). La página guarda la clave en ese celular (llega después de «#», así que nunca viaja a ningún servidor, y se borra de la dirección y del historial) y muestra el código TOTP estándar (comprobado con los valores oficiales del RFC 6238 y contra una aplicación). Se agrega a la pantalla de inicio. Sigue siendo el mismo código de 6 números de Supabase: la seguridad no cambia. Límite: si se borran los datos del navegador del celular, se usa un código de recuperación. Queda la opción de Google Authenticator con un segundo cuadro. **Solo funciona con el panel publicado (https):** el celular no puede abrir `127.0.0.1` de la PC.
+
 **Instalación y pruebas en Supabase:** `npx vite-node supabase/pruebas-servidor.ts` (con un token en `claves/supabase-token.txt`) aplica la migración del sello, crea el sello, guarda el secreto, sube las funciones, importa la versión 1, corre las pruebas obligatorias de P5 y P6 y deja todo limpio; `--solo-limpiar` solo deja todo como la primera vez.
 
 ## Dudas abiertas

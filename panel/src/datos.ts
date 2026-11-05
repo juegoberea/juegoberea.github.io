@@ -3,6 +3,7 @@
 import type { Contenido } from '../../app/src/contenido/tipos';
 import type { CapituloBanco, FilaPregunta } from './compartido/banco';
 import type { FilaCapitulo } from './estados';
+import * as muestra from './muestra';
 import type { CapituloRevisado, Medicion } from './revision';
 import { db } from './supabase';
 
@@ -48,6 +49,7 @@ function revisar<T>(r: { data: T; error: unknown }): T {
 }
 
 export async function leerDatos(): Promise<DatosPanel> {
+  if (muestra.enMuestra) return muestra.leerDatos();
   const cliente = db();
   const [libro, capitulos, versiones, registro] = await Promise.all([
     cliente.from('libros').select('id, titulo, total_capitulos').eq('id', LIBRO).single(),
@@ -59,18 +61,21 @@ export async function leerDatos(): Promise<DatosPanel> {
 }
 
 export async function leerVersiones(): Promise<FilaVersion[]> {
+  if (muestra.enMuestra) return muestra.leerVersiones();
   const r = await db().from('versiones').select('numero, publicada_en, capitulos, mensaje, vuelve_a, retirada_en').order('numero', { ascending: false });
   return revisar(r) ?? [];
 }
 
 /** El contenido de la última versión publicada (para comparar «antes» y «ahora»). */
 export async function contenidoPublicado(): Promise<Contenido | null> {
+  if (muestra.enMuestra) return muestra.contenidoPublicado();
   const r = await db().from('versiones').select('contenido').is('retirada_en', null).order('numero', { ascending: false }).limit(1).maybeSingle();
   return (revisar(r)?.contenido as Contenido | undefined) ?? null;
 }
 
 /** Todo el banco del libro: capítulos con sus preguntas. */
 export async function leerBanco(): Promise<CapituloGuardado[]> {
+  if (muestra.enMuestra) return muestra.leerBanco();
   const cliente = db();
   const [capitulos, preguntas] = await Promise.all([
     cliente.from('capitulos').select('numero, titulo, reflexion, validacion, avisos, huella, huella_publicada, medicion').eq('libro_id', LIBRO).order('numero'),
@@ -85,6 +90,7 @@ export async function leerBanco(): Promise<CapituloGuardado[]> {
 
 /** Guarda capítulos revisados: reemplaza sus preguntas. No toca lo publicado (huella_publicada). */
 export async function guardarCapitulos(revisados: CapituloRevisado[], mediciones: Map<number, Medicion | null>): Promise<void> {
+  if (muestra.enMuestra) return muestra.guardarCapitulos(revisados, mediciones);
   const cliente = db();
   for (const r of revisados) {
     const c = r.capitulo;
@@ -106,11 +112,13 @@ export async function guardarCapitulos(revisados: CapituloRevisado[], mediciones
 
 /** Actualiza solo la revisión de un capítulo (avisos, validación, medición), sin tocar sus preguntas. */
 export async function guardarRevision(r: CapituloRevisado, medicion: Medicion | null): Promise<void> {
+  if (muestra.enMuestra) return muestra.guardarRevision(r, medicion);
   revisar(await db().from('capitulos').update({ validacion: r.validacion, avisos: r.avisos, huella: r.huella, medicion }).eq('libro_id', LIBRO).eq('numero', r.capitulo.numero));
 }
 
 /** Guarda una pregunta corregida y la revisión nueva de su capítulo. */
 export async function guardarPregunta(capitulo: number, pregunta: FilaPregunta, r: CapituloRevisado, medicion: Medicion | null): Promise<void> {
+  if (muestra.enMuestra) return muestra.guardarPregunta(capitulo, pregunta, r, medicion);
   const { orden, ...campos } = pregunta;
   revisar(await db().from('preguntas').update(campos).eq('libro_id', LIBRO).eq('capitulo', capitulo).eq('orden', orden));
   await guardarRevision(r, medicion);
@@ -118,6 +126,7 @@ export async function guardarPregunta(capitulo: number, pregunta: FilaPregunta, 
 
 /** Llama a una función del servidor (publicar, acciones delicadas) con la sesión de la autora. */
 export async function llamarFuncion<T>(nombre: string, cuerpo: Record<string, unknown>): Promise<T> {
+  if (muestra.enMuestra) return muestra.llamarFuncion<T>();
   const { data, error } = await db().functions.invoke(nombre, { body: cuerpo });
   if (error) {
     // El servidor explica el problema en el cuerpo de la respuesta.

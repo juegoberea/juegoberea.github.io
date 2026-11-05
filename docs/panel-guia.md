@@ -10,7 +10,7 @@ Los jugadores no se enteran de nada de lo que haces en el panel hasta que public
 |---|---|
 | Tu PC con Chrome o Edge | Para usar el panel (también sirve una tableta). |
 | Tu usuario: **sharon** y tu contraseña | Para entrar. La contraseña está en el sobre. |
-| Tu celular con la aplicación de códigos | Te da un código de 6 números cada vez que entras. |
+| Tu celular, con el icono «Código de Berea» | Te da un código de 6 números cada vez que entras (no hay que instalar nada). |
 | El sobre | Contraseña, códigos de recuperación y una copia del sello. |
 | Tu pendrive | Tu **sello** (para las acciones muy delicadas) y la llave de firma. |
 
@@ -18,13 +18,21 @@ Los jugadores no se enteran de nada de lo que haces en el panel hasta que public
 
 1. Abre la dirección del panel (te la da el programador; termina en `/panel/`).
 2. En **Usuario** escribe `sharon`. En **Contraseña**, la de tu sobre. Pulsa **Entrar**.
-3. Abre en tu celular la aplicación de códigos (Google Authenticator o Microsoft Authenticator) y escribe el código de 6 números que aparece para Berea. Cambia cada 30 segundos: si no entra, escribe el nuevo.
+3. Abre en tu celular el icono **«Código de Berea»** y escribe los 6 números que aparecen. Cambian cada 30 segundos: si no entra, escribe los nuevos.
 
-**La primera vez** el panel te pide activar el código:
-1. Instala en tu celular Google Authenticator o Microsoft Authenticator. En la aplicación, activa la **copia en la nube**: así no pierdes los códigos si cambias de celular.
-2. En la aplicación toca **«+»** y escanea el cuadro (código QR) que muestra el panel.
-3. Escribe el código de 6 números que aparece y pulsa **Activar**.
-4. El panel te muestra **10 códigos de recuperación**. Escríbelos en un papel (o pulsa **Imprimir**) y guárdalos en el sobre. No se vuelven a mostrar.
+**La primera vez** el panel te pide activar el código. No hace falta instalar nada:
+1. En tu celular, **baja la barra de arriba** (donde están el WiFi y los datos) y toca **«Escanear código QR»**. También sirve la cámara.
+2. Apunta al cuadro que muestra el panel. Se abre en tu celular la página **«Código de Berea»**.
+3. Elige un **PIN de 4 números** y escríbelo dos veces (no sirven los fáciles, como 1234 o 0000). Anótalo en el sobre. Desde ahora, la página te pide el PIN cada vez que la abres, y se vuelve a cerrar sola al salir de ella. Así nadie más ve tu código aunque tome tu celular.
+4. En el menú del navegador del celular (⋮), toca **«Agregar a la pantalla de inicio»**. Así queda un icono de Berea para abrirla cuando quieras.
+5. Escribe en el panel los 6 números que muestra y pulsa **Activar**.
+6. El panel te muestra **10 códigos de recuperación**. Escríbelos en un papel (o pulsa **Imprimir**) y guárdalos en el sobre. No se vuelven a mostrar.
+
+Desde entonces, para entrar: usuario, contraseña y los 6 números que muestra el icono «Código de Berea» de tu celular.
+
+> Si borras los datos del navegador del celular o cambias de celular, la página «Código de Berea» se olvida. Entra con un código de recuperación del sobre y el panel te muestra un cuadro nuevo para escanear.
+>
+> ¿Prefieres una aplicación? En la pantalla de activación toca «¿Prefieres usar Google Authenticator?» y escanea ese cuadro con la aplicación.
 
 ## Cómo subir preguntas nuevas o corregidas
 
@@ -73,7 +81,7 @@ Todo queda anotado en el registro con fecha y hora, también los intentos que fa
 
 ## Qué guardar en el sobre
 
-- Tu **contraseña** del panel.
+- Tu **contraseña** del panel y el **PIN** de tu celular.
 - Los **10 códigos de recuperación** (cada uno sirve una sola vez).
 - Una **segunda copia del sello** (`sello-de-la-autora.berea`), en otro pendrive o en un CD.
 
@@ -84,7 +92,8 @@ Guarda el sobre en un lugar seguro de tu casa. No le saques foto ni lo guardes e
 | Qué pasó | Qué hacer |
 |---|---|
 | **Olvidé la contraseña** | Mírala en el sobre. Si no está, pide al programador que la cambie. |
-| **Perdí o cambié el celular** | Si activaste la copia en la nube de la aplicación, instálala en el celular nuevo y entra con tu cuenta: los códigos vuelven solos. Si no, en la pantalla del código pulsa **Usar un código de recuperación** y escribe uno del sobre (táchalo después). El panel te pide activar el código otra vez en el celular nuevo. |
+| **Olvidé el PIN del celular** | Mira el sobre. Si no está, en «Código de Berea» toca **Olvidé mi PIN**: se borra el código del celular. Entra al panel con un código de recuperación y escanea el cuadro nuevo. Con 5 PIN equivocados seguidos hay que esperar 5 minutos. |
+| **Perdí o cambié el celular** | En la pantalla del código pulsa **Usar un código de recuperación** y escribe uno del sobre (táchalo después). El panel te muestra un cuadro nuevo: escanéalo con el celular nuevo. |
 | **Se me acabaron los códigos de recuperación** | Entra al panel y en **Seguridad** pulsa **Ver · con tu sello** junto a «Códigos de recuperación»: te da 10 nuevos. |
 | **Perdí el pendrive** | Usa la copia del sello del sobre y pide al programador que cree un sello nuevo (los viejos dejan de servir). La llave de firma también está guardada en el servidor, así que se puede seguir publicando. |
 | **Alguien vio mi contraseña** | Cámbiala en **Seguridad** (con tu sello). Sin tu celular igual no puede entrar. |
