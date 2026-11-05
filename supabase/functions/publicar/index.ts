@@ -9,7 +9,7 @@ import { CLAVE_CIFRADO, CLAVE_PUBLICA } from '../_shared/generado/claves.ts';
 import { deBase64 } from '../_shared/generado/codificacion.ts';
 import { empaquetarContenido } from '../_shared/generado/formato.ts';
 import type { Contenido } from '../_shared/generado/tipos.ts';
-import { anotar, comprobarAutora, json, LIBRO, Rechazo, servir, sha256Hex } from '../_shared/servidor.ts';
+import { anotar, comprobarAutora, exigirCodigoReciente, json, LIBRO, Rechazo, servir, sha256Hex } from '../_shared/servidor.ts';
 
 const listaCapitulos = (ns: number[]) => {
   const o = [...ns].sort((a, b) => a - b);
@@ -18,6 +18,7 @@ const listaCapitulos = (ns: number[]) => {
 
 servir(async (pedido) => {
   const l = await comprobarAutora(pedido);
+  exigirCodigoReciente(pedido);
   const cuerpo = (await pedido.json().catch(() => ({}))) as { capitulos?: unknown; mensaje?: unknown; volverA?: unknown };
   const { admin } = l;
 

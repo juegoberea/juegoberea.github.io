@@ -1,6 +1,7 @@
 // Pantalla 03 · Inicio: avance del libro, versión de los jugadores, cambios sin publicar,
 // capítulos que necesitan atención y actividad reciente.
 
+import { AvisoBorrado } from '../componentes/AvisoBorrado';
 import { describirCapitulos, fechaCorta, fechaDia, necesitanAtencion, resumenLibro } from '../estados';
 import type { DatosPanel } from '../datos';
 import type { Autora } from '../sesion';
@@ -8,8 +9,18 @@ import { t } from '../textos';
 
 const porcentaje = (n: number, total: number) => `${((n / total) * 100).toFixed(2)}%`;
 
-export function Inicio({ autora, datos }: { autora: Autora; datos: DatosPanel }) {
-  const { libro, capitulos, version, registro } = datos;
+function UltimaEntrada({ vigilancia }: { vigilancia: DatosPanel['vigilancia'] }) {
+  const { anterior, fallos } = vigilancia;
+  const textoFallos = fallos === 0 ? t('inicio.sinFallos') : fallos === 1 ? t('inicio.fallos1') : t('inicio.fallos', { n: fallos });
+  return (
+    <p class={`note ${fallos ? 'err' : 'lock'}`} role={fallos ? 'alert' : 'status'}>
+      {anterior ? t('inicio.ultimaEntrada', { fecha: fechaCorta(anterior.cuando), navegador: anterior.navegador || '—' }) : t('inicio.primeraEntrada')} {textoFallos}
+    </p>
+  );
+}
+
+export function Inicio({ autora, datos, recargar }: { autora: Autora; datos: DatosPanel; recargar: () => void }) {
+  const { libro, capitulos, version, registro, vigilancia } = datos;
   const r = resumenLibro(capitulos, libro.total_capitulos);
   const atencion = necesitanAtencion(capitulos);
   const partes = ['publicados', 'listos', 'advertencias', 'errores'] as const;
@@ -26,6 +37,9 @@ export function Inicio({ autora, datos }: { autora: Autora; datos: DatosPanel })
           <a class="btn pri" href="#/publicar">{t('inicio.publicar')}</a>
         </div>
       </div>
+
+      {vigilancia.borrado && <AvisoBorrado borrado={vigilancia.borrado} alCambiar={recargar} />}
+      <UltimaEntrada vigilancia={vigilancia} />
 
       <section class="card" aria-labelledby="avance">
         <div class="row" style={{ justifyContent: 'space-between' }}>

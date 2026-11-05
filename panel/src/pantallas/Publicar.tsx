@@ -5,12 +5,17 @@ import { useEffect, useState } from 'preact/hooks';
 import type { Contenido } from '../../../app/src/contenido/tipos';
 import { contenidoPublicado, leerVersiones, llamarFuncion, LIBRO, type CapituloGuardado, type FilaVersion, type Libro } from '../datos';
 import { describirCapitulos, estadoCapitulo, fechaDia } from '../estados';
+import { PIDE_CODIGO } from '../compartido/sello';
+import { PedirCodigo } from '../componentes/PedirCodigo';
 import { IconoCheck, IconoInfo } from '../iconos';
+import { codigoReciente } from '../sesion';
 import { t } from '../textos';
 import { useBanco } from '../useBanco';
 import { corregidasSinPublicar } from './VistaPrevia';
 
 const LARGO_MENSAJE = 300;
+
+type Pedido = { capitulos: number[]; mensaje: string } | { volverA: number };
 
 function detalle(c: CapituloGuardado, publicado: Contenido | null): { clase: string; etiqueta: string; texto: string } {
   const estado = estadoCapitulo(c);
@@ -34,6 +39,7 @@ export function Publicar({ libro, alPublicar }: { libro: Libro; alPublicar: () =
   const [mensaje, setMensaje] = useState('');
   const [trabajando, setTrabajando] = useState(false);
   const [aviso, setAviso] = useState<{ tipo: 'ok' | 'err'; texto: string } | null>(null);
+  const [pidiendo, setPidiendo] = useState<Pedido | null>(null);
 
   async function cargar() {
     const [v, c] = await Promise.all([leerVersiones(), contenidoPublicado()]);
@@ -69,9 +75,11 @@ export function Publicar({ libro, alPublicar }: { libro: Libro; alPublicar: () =
     setMarcados(nuevo);
   }
 
-  async function publicar(cuerpo: { capitulos: number[]; mensaje: string } | { volverA: number }) {
-    setTrabajando(true);
+  // Lo que llega a los jugadores pide el código de 6 números puesto hace poco (lo exige el servidor).
+  async function publicar(cuerpo: Pedido) {
     setAviso(null);
+    if (!(await codigoReciente())) return setPidiendo(cuerpo);
+    setTrabajando(true);
     try {
       const r = await llamarFuncion<{ numero: number }>('publicar', cuerpo);
       setAviso({ tipo: 'ok', texto: t('publicar.listo', { n: r.numero }) });
@@ -80,7 +88,8 @@ export function Publicar({ libro, alPublicar }: { libro: Libro; alPublicar: () =
       await Promise.all([cargar(), recargar()]);
       alPublicar();
     } catch (e) {
-      setAviso({ tipo: 'err', texto: (e as Error).message });
+      if ((e as Error).message === PIDE_CODIGO) setPidiendo(cuerpo);
+      else setAviso({ tipo: 'err', texto: (e as Error).message });
     } finally {
       setTrabajando(false);
     }
@@ -164,6 +173,16 @@ export function Publicar({ libro, alPublicar }: { libro: Libro; alPublicar: () =
           <div class="note info"><IconoInfo /><span>{t('publicar.volverAyuda')}</span></div>
         </section>
       </div>
+      {pidiendo && (
+        <PedirCodigo
+          alConfirmar={() => {
+            const cuerpo = pidiendo;
+            setPidiendo(null);
+            void publicar(cuerpo);
+          }}
+          alCancelar={() => setPidiendo(null)}
+        />
+      )}
     </>
   );
 }

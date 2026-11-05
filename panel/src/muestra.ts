@@ -37,7 +37,7 @@ function cargar() {
 
 export async function leerDatos(): Promise<DatosPanel> {
   const m = await cargar();
-  return { libro: { ...LIBRO }, capitulos: m.banco, version: m.version, registro: m.registro };
+  return { libro: { ...LIBRO }, capitulos: m.banco, version: m.version, registro: m.registro, vigilancia: { anterior: null, fallos: 0, borrado: null } };
 }
 
 export async function leerVersiones(): Promise<FilaVersion[]> {

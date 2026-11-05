@@ -34,6 +34,18 @@ Desde entonces, para entrar: usuario, contraseña y los 6 números que muestra e
 >
 > ¿Prefieres una aplicación? En la pantalla de activación toca «¿Prefieres usar Google Authenticator?» y escanea ese cuadro con la aplicación.
 
+## Protecciones automáticas
+
+El panel se cuida solo. No tienes que hacer nada, pero conviene que sepas qué pasa:
+
+- **5 intentos equivocados seguidos** (contraseña o código): hay que esperar 15 minutos. Cada intento queda anotado.
+- **Al entrar**, en Inicio ves cuándo y desde qué aparato entraste la vez anterior, y si alguien intentó entrar con datos equivocados desde entonces. Si no fuiste tú, cambia tu contraseña en **Seguridad**.
+- **Al entrar se cierra el panel en cualquier otro aparato** donde lo hayas dejado abierto.
+- **15 minutos sin usar el panel**: se cierra solo y hay que volver a entrar.
+- **Al publicar** te pide otra vez los 6 números de tu celular, porque lo que publicas llega a todos los jugadores.
+- **Borrar un libro o todo el banco** no se hace enseguida: se hace **24 horas después**. Hasta entonces aparece un aviso rojo en Inicio y en Seguridad con el botón **Cancelar el borrado**.
+- **Copia automática del banco** todas las madrugadas, y otra justo antes de cada borrado. Se guardan las últimas 30. Si algo se pierde, el programador lo recupera desde ahí.
+
 ## Cómo subir preguntas nuevas o corregidas
 
 1. Edita tu Excel como siempre y guárdalo.
@@ -61,7 +73,7 @@ En la misma pantalla, **Descargar el banco como Excel** te da una copia de todo 
    - Los que tienen advertencias vienen **sin marcar**: decides tú si los incluyes.
    - Los que tienen errores aparecen bloqueados, con el botón **Corregir**.
 2. Si quieres, escribe un **mensaje para los jugadores**. Aparece en la pantalla de inicio del juego.
-3. Pulsa **Publicar versión N**. El contenido **se firma solo** con la llave de Berea; no tienes que hacer nada más.
+3. Pulsa **Publicar versión N**. Si entraste hace más de unos minutos, el panel te pide otra vez los 6 números de tu celular. El contenido **se firma solo** con la llave de Berea; no tienes que hacer nada más.
 4. Los jugadores reciben la versión nueva la próxima vez que abran Berea con internet. **Su avance no se toca.**
 
 **Si te equivocaste:** en **Versiones publicadas**, pulsa **Volver a esta** en la versión buena. Se publica otra vez con un número nuevo (por ejemplo, la 5 igual a la 3).

@@ -15,7 +15,7 @@ import { abrirContenido, empaquetarContenido } from '../app/src/contenido/format
 import type { Contenido } from '../app/src/contenido/tipos';
 import { leerArchivoClave } from '../convertidor/src/clave-firma';
 import { capituloDelJuego, huellaCapitulo } from '../panel/src/compartido/banco';
-import { ACCIONES_DELICADAS, textoDelDesafio, type AccionDelicada } from '../panel/src/compartido/sello';
+import { ACCIONES_DELICADAS, segundosDesdeElCodigo, textoDelDesafio, type AccionDelicada } from '../panel/src/compartido/sello';
 import { leerExcelBanco, revisarCapitulos } from '../panel/src/revision';
 
 const BEREA = 'C:/Users/reviv/Desktop/berea';
@@ -58,6 +58,10 @@ function totp(secreto: string, desfase = 0) {
 console.log('== Preparar Supabase ==');
 await sql(readFileSync(`${BEREA}/supabase/migrations/20261104140000_sello.sql`, 'utf8'));
 console.log('  migración del sello aplicada (y depósito «contenido» público)');
+await sql(readFileSync(`${BEREA}/supabase/migrations/20261105120000_seguridad.sql`, 'utf8'));
+console.log('  migración de seguridad aplicada (intentos, sesiones, borrados con espera, copias diarias)');
+await api('PATCH', `/v1/projects/${REF}/config/auth`, { password_min_length: 10 });
+console.log('  contraseñas de al menos 10 letras');
 if (!existsSync(`${CLAVES}/sello-de-la-autora.berea`)) {
   execFileSync('C:/Program Files/nodejs/node.exe', [`${BEREA}/node_modules/vite-node/vite-node.mjs`, `${BEREA}/convertidor/crear-sello.ts`], { cwd: BEREA, stdio: 'ignore' });
   console.log('  sello de la autora creado en claves/sello-de-la-autora.berea');
@@ -132,7 +136,8 @@ async function limpiar() {
   const { data: factores } = await admin.auth.admin.mfa.listFactors({ userId: AUTORA });
   for (const f of factores?.factors ?? []) await admin.auth.admin.mfa.deleteFactor({ userId: AUTORA, id: f.id });
   const { contenido } = await importarBanco();
-  await sql(`delete from privado.codigos_recuperacion where true; delete from privado.intentos_recuperacion where true; delete from privado.desafios where true; delete from public.registro where true;`);
+  await sql(`delete from privado.codigos_recuperacion where true; delete from privado.intentos_recuperacion where true; delete from privado.desafios where true; delete from public.registro where true;
+    delete from privado.intentos_entrada where true; delete from privado.borrados_pendientes where true; delete from privado.copias where true;`);
   const final = await bajarPublicado();
   const { data: vs } = await admin.from('versiones').select('numero');
   const quedan = await admin.auth.admin.mfa.listFactors({ userId: AUTORA });
@@ -158,6 +163,8 @@ async function conCodigo(c: SupabaseClient) {
   const { error } = await c.auth.mfa.verify({ factorId: factorPrueba!, challengeId: ch!.id, code: totp(secreto) });
   if (error) throw error;
 }
+/** Espera al código siguiente (el mismo código no sirve dos veces). */
+const siguienteCodigo = () => new Promise((r) => setTimeout(r, (30 - (Math.floor(Date.now() / 1000) % 30) + 1) * 1000));
 async function funcion(c: SupabaseClient, nombre: string, cuerpo: Record<string, unknown>) {
   const { data, error } = await c.functions.invoke(nombre, { body: cuerpo });
   const detalle = error ? await (error as { context?: Response }).context?.json?.().catch(() => null) : null;
@@ -205,6 +212,12 @@ try {
   comprobar('volver a la versión 1 la publica como versión 3', !r2.error && r2.data?.numero === 3, r2.error ?? '');
   const pub3 = await bajarPublicado();
   comprobar('la versión 3 tiene el contenido de la 1 con un número mayor que la 2', isDeepStrictEqual(pub3.contenido?.libros, v1.libros) && (pub3.contenido?.version ?? 0) > (pub2.contenido?.version ?? 0), `versión 3: ${pub3.contenido?.version} · versión 2: ${pub2.contenido?.version}`);
+  // Volver a poner el código renueva su hora (el panel lo pide otra vez antes de publicar).
+  await siguienteCodigo();
+  await conCodigo(autora);
+  const { data: renovada } = await autora.auth.getSession();
+  const desde = segundosDesdeElCodigo(renovada.session?.access_token ?? '');
+  comprobar('volver a poner el código de 6 números renueva su hora (publicar lo pide de hace 5 minutos o menos)', desde !== null && desde < 10, `hace ${desde} s`);
   const alterado = pub3.bytes.slice();
   alterado[alterado.length - 5] ^= 1;
   const abierto = await abrirContenido(alterado, { cifrado: deBase64(CLAVE_CIFRADO), firmaPublica: deHex(CLAVE_PUBLICA) }).then(() => true, () => false);
@@ -262,16 +275,71 @@ try {
   const entraClave = await cliente().auth.signInWithPassword({ email: 'sharon@berea.invalid', password: 'contraseña-de-prueba-123' });
   comprobar('«cambiar_contrasena» funciona (y se vuelve a la de la autora)', !clave.r.error && !entraClave.error);
   await admin.auth.admin.updateUserById(AUTORA, { password: FRASE, email: 'sharon@berea.invalid', email_confirm: true });
-  const retirar = await ok('retirar');
+  // Cambiar la contraseña cierra todas las sesiones abiertas (también esta): ya no puede hacer acciones.
+  const cerrada = await funcion(autora, 'accion-delicada', { accion: 'retirar', desafio: '', firma: '', datos: {} });
+  const { data: leeCerrada } = await autora.from('capitulos').select('numero').eq('libro_id', LIBRO);
+  comprobar('después de cambiar la contraseña, las sesiones abiertas ya no pueden hacer acciones ni leer el banco', cerrada.estado === 403 && (leeCerrada?.length ?? 0) === 0, cerrada.error ?? '');
+  await siguienteCodigo();
+  await autora.auth.signInWithPassword({ email: 'sharon@berea.invalid', password: FRASE });
+  await conCodigo(autora);
+
+  // Salir en otro aparato: al entrar, el panel cierra las demás sesiones y dejan de leer enseguida.
+  const otraPc = cliente();
+  await otraPc.auth.signInWithPassword({ email: 'sharon@berea.invalid', password: FRASE });
+  await siguienteCodigo();
+  await conCodigo(otraPc);
+  const { data: antes } = await autora.from('capitulos').select('numero').eq('libro_id', LIBRO);
+  await otraPc.auth.signOut({ scope: 'others' });
+  const { data: despues } = await autora.from('capitulos').select('numero').eq('libro_id', LIBRO);
+  comprobar('al entrar en otro aparato, la sesión anterior deja de leer el banco enseguida', (antes?.length ?? 0) === 10 && (despues?.length ?? 0) === 0, `antes ${antes?.length} · después ${despues?.length}`);
+  const autoraDeNuevo = otraPc;
+
+  // Intentos equivocados: con 5 en 15 minutos, el panel hace esperar; quedan en el registro.
+  const anonimo5 = cliente();
+  let pausa = 0;
+  for (let i = 0; i < 5; i++) pausa = ((await anonimo5.rpc('anotar_entrada_fallida', { p_tipo: 'contrasena', p_navegador: 'Prueba' })).data as number) ?? 0;
+  const { data: pausaLeida } = await cliente().rpc('pausa_de_entrada');
+  const { count: fallidas } = await admin.from('registro').select('*', { count: 'exact', head: true }).eq('accion', 'entrada_fallida');
+  comprobar('5 intentos equivocados → hay que esperar unos 15 minutos, y quedan en el registro', pausa > 800 && (pausaLeida as number) > 800 && fallidas === 5, `pausa ${pausa} s · anotados ${fallidas}`);
+  await sql('delete from privado.intentos_entrada where true');
+  const { data: sinPausa } = await cliente().rpc('pausa_de_entrada');
+  comprobar('sin intentos equivocados recientes no hay que esperar', sinPausa === 0);
+
+  // Copia del banco.
+  await sql('select privado.copiar_banco()');
+  const { data: copiaHecha } = await autoraDeNuevo.rpc('ultima_copia');
+  comprobar('la copia del banco guarda los 10 capítulos', (copiaHecha as { capitulos?: number })?.capitulos === 10);
+
+  const okDe = async (c: SupabaseClient, a: AccionDelicada) => {
+    const id = ((await c.rpc('crear_desafio', { accion: a })).data as { id: string }).id;
+    return funcion(c, 'accion-delicada', { accion: a, desafio: id, firma: await firmar(id, a, privada), datos: {} });
+  };
+  const retirar = { r: await okDe(autoraDeNuevo, 'retirar') };
   const tras = await fetch(`${URL_CONTENIDO}?buscar=${Date.now()}`, { cache: 'no-store' });
   comprobar('«retirar» quita el contenido publicado (el juego sigue con el que tiene)', !retirar.r.error && tras.status >= 400, retirar.r.error ?? `respuesta ${tras.status}`);
-  const borrarLibro = await ok('borrar_libro');
-  const { count: quedanLibro } = await admin.from('capitulos').select('*', { count: 'exact', head: true }).eq('libro_id', LIBRO);
-  comprobar('«borrar_libro» borra los capítulos del libro', !borrarLibro.r.error && quedanLibro === 0, borrarLibro.r.error ?? `quedan ${quedanLibro}`);
+  const cuenta = async () => (await admin.from('capitulos').select('*', { count: 'exact', head: true }).eq('libro_id', LIBRO)).count;
+  // Borrar no es inmediato: 24 horas después, y se puede cancelar.
+  const borrarLibro = await okDe(autoraDeNuevo, 'borrar_libro');
+  const { data: pendiente } = await autoraDeNuevo.rpc('borrado_pendiente');
+  const horas = (new Date((pendiente as { ejecutar_en: string }).ejecutar_en).getTime() - Date.now()) / 3_600_000;
+  comprobar('«borrar_libro» queda programado para dentro de 24 horas y no borra nada todavía', !borrarLibro.error && (await cuenta()) === 10 && Math.abs(horas - 24) < 0.1 /* margen: el reloj de esta PC y el del servidor no son idénticos */, borrarLibro.error ?? `en ${horas.toFixed(2)} h`);
+  const { data: cancelado } = await autoraDeNuevo.rpc('cancelar_borrado');
+  const { data: yaNo } = await autoraDeNuevo.rpc('borrado_pendiente');
+  await sql('select privado.hacer_borrados()');
+  comprobar('cancelar el borrado deja todo como estaba', cancelado === true && yaNo === null && (await cuenta()) === 10);
+  await okDe(autoraDeNuevo, 'borrar_libro');
+  await sql(`update privado.borrados_pendientes set ejecutar_en = now() - interval '1 minute'`);
+  await sql('select privado.hacer_borrados()');
+  const copias = await sql(`select motivo, capitulos from privado.copias order by id desc limit 1`);
+  comprobar('pasadas las 24 horas, «borrar_libro» borra el libro (con una copia de antes)', (await cuenta()) === 0 && copias[0]?.motivo === 'antes de borrar libro' && copias[0]?.capitulos === 10, `quedan ${await cuenta()} · copia: ${JSON.stringify(copias[0])}`);
   await importarBanco();
-  const borrarBanco = await ok('borrar_banco');
+  const borrarBanco = await okDe(autoraDeNuevo, 'borrar_banco');
+  await sql(`update privado.borrados_pendientes set ejecutar_en = now() - interval '1 minute'`);
+  await sql('select privado.hacer_borrados()');
   const { count: quedanBanco } = await admin.from('capitulos').select('*', { count: 'exact', head: true });
-  comprobar('«borrar_banco» borra todo el banco', !borrarBanco.r.error && quedanBanco === 0, borrarBanco.r.error ?? `quedan ${quedanBanco}`);
+  comprobar('pasadas las 24 horas, «borrar_banco» borra todo el banco', !borrarBanco.error && quedanBanco === 0, borrarBanco.error ?? `quedan ${quedanBanco}`);
+  const { data: cron } = { data: await sql(`select jobname, schedule from cron.job where jobname like 'berea-%' order by jobname`) };
+  comprobar('las tareas automáticas están programadas (borrados cada 10 min, copia diaria)', JSON.stringify(cron) === JSON.stringify([{ jobname: 'berea-borrados', schedule: '*/10 * * * *' }, { jobname: 'berea-copia-diaria', schedule: '0 7 * * *' }]), JSON.stringify(cron));
   const { data: registro } = await admin.from('registro').select('accion, resultado').eq('accion', 'accion_delicada');
   comprobar('cada acción delicada, intentada o hecha, queda en el registro', (registro?.filter((r) => r.resultado === 'rechazado').length ?? 0) >= 50 && (registro?.filter((r) => r.resultado === 'hecho').length ?? 0) >= 9, `rechazadas ${registro?.filter((r) => r.resultado === 'rechazado').length} · hechas ${registro?.filter((r) => r.resultado === 'hecho').length}`);
 } finally {

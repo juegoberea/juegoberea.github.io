@@ -6,8 +6,9 @@ import * as ed from '@noble/ed25519';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { deHex, aHex } from '../../../app/src/contenido/codificacion';
 import { TIPO_SELLO, textoDelDesafio, type AccionDelicada, type ArchivoSello } from '../compartido/sello';
-import { leerVersiones, llamarFuncion, type FilaVersion } from '../datos';
-import { fechaDia } from '../estados';
+import { AvisoBorrado } from '../componentes/AvisoBorrado';
+import { leerVersiones, llamarFuncion, ultimaCopia, type FilaVersion, type Vigilancia } from '../datos';
+import { fechaCorta, fechaDia } from '../estados';
 import { IconoAlerta, IconoSello } from '../iconos';
 import type { Autora } from '../sesion';
 import { mensajeDeError } from '../sesion';
@@ -65,7 +66,7 @@ function VentanaSello({ accion, alCerrar }: { accion: AccionDelicada; alCerrar: 
     ventana.current?.showModal();
   }, []);
 
-  const faltanDatos = (elegida === 'cambiar_usuario' && usuario.trim().length < 3) || (elegida === 'cambiar_contrasena' && contrasena.length < 8);
+  const faltanDatos = (elegida === 'cambiar_usuario' && usuario.trim().length < 3) || (elegida === 'cambiar_contrasena' && contrasena.length < 10);
 
   async function ponerSello(e: Event) {
     const elegido = (e.target as HTMLInputElement).files?.[0];
@@ -125,14 +126,16 @@ function VentanaSello({ accion, alCerrar }: { accion: AccionDelicada; alCerrar: 
   );
 }
 
-export function Seguridad({ autora }: { autora: Autora }) {
+export function Seguridad({ autora, borrado, recargar }: { autora: Autora; borrado: Vigilancia['borrado']; recargar: () => void }) {
   const [accion, setAccion] = useState<AccionDelicada | null>(null);
   const [haySello, setHaySello] = useState<boolean | null>(null);
   const [ultima, setUltima] = useState<FilaVersion | null>(null);
+  const [copia, setCopia] = useState<Awaited<ReturnType<typeof ultimaCopia>>>(null);
 
   useEffect(() => {
     db().rpc('hay_sello').then(({ data }) => setHaySello(data === true));
     leerVersiones().then((v) => setUltima(v[0] ?? null), () => undefined);
+    ultimaCopia().then(setCopia, () => undefined);
   }, []);
 
   const Fila = ({ titulo, valor, boton, onClick, estado }: { titulo: string; valor: string; boton?: string; onClick?: () => void; estado?: string }) => (
@@ -152,6 +155,7 @@ export function Seguridad({ autora }: { autora: Autora }) {
         </div>
       </div>
       {haySello === false && <p class="note err">{t('seguridad.sinSello')}</p>}
+      {borrado && <AvisoBorrado borrado={borrado} alCambiar={recargar} />}
 
       <div class="cols2">
         <section class="card">
@@ -171,6 +175,16 @@ export function Seguridad({ autora }: { autora: Autora }) {
       </div>
 
       <section class="card">
+        <h2>{t('seguridad.proteccion')}</h2>
+        <Fila titulo={t('seguridad.cierre')} valor={t('seguridad.cierreValor')} />
+        <Fila titulo={t('seguridad.otrosAparatos')} valor={t('seguridad.otrosAparatosValor')} />
+        <Fila titulo={t('seguridad.intentos')} valor={t('seguridad.intentosValor')} />
+        <Fila titulo={t('seguridad.alPublicar')} valor={t('seguridad.alPublicarValor')} />
+        <Fila titulo={t('seguridad.borrados')} valor={t('seguridad.borradosValor')} />
+        <Fila titulo={t('seguridad.copia')} valor={copia ? t('seguridad.copiaValor', { fecha: fechaCorta(copia.creada_en), n: copia.capitulos }) : t('seguridad.sinCopia')} />
+      </section>
+
+      <section class="card">
         <h2>{t('seguridad.delicadas')}</h2>
         <p class="sub">{t('seguridad.delicadasTexto')}</p>
         <div class="delicadas">
@@ -182,7 +196,7 @@ export function Seguridad({ autora }: { autora: Autora }) {
         </div>
       </section>
 
-      {accion && <VentanaSello accion={accion} alCerrar={() => setAccion(null)} />}
+      {accion && <VentanaSello accion={accion} alCerrar={() => { setAccion(null); recargar(); }} />}
     </>
   );
 }

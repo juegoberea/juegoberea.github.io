@@ -18,11 +18,13 @@ import { faseActual, mensajeDeError, salir, type Autora, type Fase } from './ses
 import { configurado } from './supabase';
 import { t } from './textos';
 
+const INACTIVIDAD = 15 * 60_000;
+
 function Pantalla({ ruta, autora, datos, recargar }: { ruta: RutaPanel; autora: Autora; datos: DatosPanel; recargar: () => void }) {
   const ir = (hash: string) => (location.hash = hash);
   switch (ruta.pantalla) {
     case 'inicio':
-      return <Inicio autora={autora} datos={datos} />;
+      return <Inicio autora={autora} datos={datos} recargar={recargar} />;
     case 'subir':
       return <SubirBanco libro={datos.libro} alGuardar={() => { recargar(); ir('#/capitulos'); }} />;
     case 'capitulos':
@@ -34,7 +36,7 @@ function Pantalla({ ruta, autora, datos, recargar }: { ruta: RutaPanel; autora: 
     case 'publicar':
       return <Publicar libro={datos.libro} alPublicar={recargar} />;
     case 'seguridad':
-      return <Seguridad autora={autora} />;
+      return <Seguridad autora={autora} borrado={datos.vigilancia.borrado} recargar={recargar} />;
   }
 }
 
@@ -74,6 +76,23 @@ export function Panel() {
 
   // Adentro: los datos del resumen (menú e Inicio) se leen al entrar y al volver a Inicio.
   const adentro = fase.fase === 'dentro';
+
+  // Cierre automático: 15 minutos sin tocar el panel (por si quedó abierto en una PC prestada).
+  useEffect(() => {
+    if (!adentro || enMuestra) return;
+    let reloj = 0;
+    const reiniciar = () => {
+      clearTimeout(reloj);
+      reloj = window.setTimeout(() => seguir(() => salir(t('errores.inactividad'))), INACTIVIDAD);
+    };
+    const eventos = ['pointerdown', 'keydown', 'wheel', 'touchstart'] as const;
+    eventos.forEach((e) => window.addEventListener(e, reiniciar, { passive: true }));
+    reiniciar();
+    return () => {
+      clearTimeout(reloj);
+      eventos.forEach((e) => window.removeEventListener(e, reiniciar));
+    };
+  }, [adentro, seguir]);
   useEffect(() => {
     if (adentro && (!datos || ruta.pantalla === 'inicio')) recargar();
   }, [adentro, ruta.pantalla]);

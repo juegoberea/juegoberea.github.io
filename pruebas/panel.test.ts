@@ -8,6 +8,7 @@ import {
   necesitanAtencion, resumenLibro, type FilaCapitulo,
 } from '../panel/src/estados';
 import { abrirConPin, cerrarConPin, esperaTrasFallos, pinFacil } from '../panel/src/compartido/pin';
+import { segundosDesdeElCodigo } from '../panel/src/compartido/sello';
 import { codigoDelMomento, deBase32, segundosRestantes } from '../panel/src/compartido/totp';
 import { t } from '../panel/src/textos';
 
@@ -124,6 +125,16 @@ describe('Código de Berea (TOTP en el celular)', () => {
   it('cuenta los segundos hasta el próximo código', () => {
     expect(segundosRestantes(0)).toBe(30);
     expect(segundosRestantes(29_500)).toBe(1);
+  });
+});
+
+describe('código reciente para publicar', () => {
+  const jwt = (datos: unknown) => `e30.${Buffer.from(JSON.stringify(datos)).toString('base64url')}.firma`;
+  it('cuenta los segundos desde el último código de 6 números', () => {
+    const permiso = jwt({ amr: [{ method: 'password', timestamp: 1000 }, { method: 'totp', timestamp: 1200 }, { method: 'totp', timestamp: 1500 }] });
+    expect(segundosDesdeElCodigo(permiso, 1_800_000)).toBe(300);
+    expect(segundosDesdeElCodigo(jwt({ amr: [{ method: 'password', timestamp: 1000 }] }), 1_800_000)).toBeNull();
+    expect(segundosDesdeElCodigo('no-es-un-permiso')).toBeNull();
   });
 });
 

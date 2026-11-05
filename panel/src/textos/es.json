@@ -14,7 +14,10 @@
   },
   "codigo": {
     "titulo": "Código de 6 números",
-    "texto": "Abre la aplicación de códigos en tu celular y escribe el que aparece para Berea.",
+    "texto": "Abre «Código de Berea» en tu celular, escribe tu PIN y copia aquí los 6 números que aparecen.",
+    "otraVez": "Por seguridad, escribe otra vez tu código de 6 números",
+    "otraVezTexto": "Lo que publiques llega a todos los jugadores. Abre «Código de Berea» en tu celular y escribe el código que aparece ahora.",
+    "seguir": "Confirmar y seguir",
     "grupo": "Código de 6 números",
     "numero": "Número {n}",
     "confirmar": "Confirmar",
@@ -74,6 +77,8 @@
   "errores": {
     "credenciales": "Usuario o contraseña incorrectos.",
     "demasiados": "Demasiados intentos. Espera unos minutos y vuelve a probar.",
+    "pausa": "Hubo 5 intentos equivocados seguidos. Por seguridad, espera {n} minutos y vuelve a probar. Quedó anotado.",
+    "inactividad": "Se cerró la sesión porque pasaron 15 minutos sin usar el panel. Vuelve a entrar.",
     "red": "No hay conexión con el panel. Revisa el internet y vuelve a probar.",
     "codigo": "Ese código no es correcto o ya venció. Escribe el que aparece ahora en tu celular.",
     "noAutora": "Esta cuenta no puede entrar al panel.",
@@ -127,7 +132,19 @@
     "detalle": "Detalle",
     "sinActividad": "Todavía no hay actividad.",
     "rechazado": "Rechazado",
-    "cargando": "Cargando…"
+    "cargando": "Cargando…",
+    "ultimaEntrada": "Tu entrada anterior: {fecha} · {navegador}.",
+    "primeraEntrada": "Es tu primera entrada al panel.",
+    "sinFallos": "Nadie intentó entrar con datos equivocados desde entonces.",
+    "fallos1": "Desde entonces hubo 1 intento de entrar con datos equivocados. Si no fuiste tú, cambia tu contraseña en Seguridad.",
+    "fallos": "Desde entonces hubo {n} intentos de entrar con datos equivocados. Si no fuiste tú, cambia tu contraseña en Seguridad.",
+    "borradoPendiente": "Se va a borrar {que} el {fecha}. Si no lo pediste tú o cambiaste de idea, cancélalo.",
+    "cancelarBorrado": "Cancelar el borrado",
+    "borradoCancelado": "Listo: se canceló el borrado. No se borró nada."
+  },
+  "borrado": {
+    "borrar_libro": "Patriarcas y Profetas",
+    "borrar_banco": "todo el banco"
   },
   "capitulosTexto": {
     "varios": "capítulos {lista}",
@@ -143,7 +160,11 @@
     "banco_descargado": "Descargaste el banco como Excel",
     "pregunta_corregida": "Corregiste una pregunta",
     "version_publicada": "Publicaste una versión",
-    "accion_delicada": "Acción con tu sello"
+    "accion_delicada": "Acción con tu sello",
+    "entrada_fallida": "Intento de entrar",
+    "codigo_fallido": "Intento con el código",
+    "borrado_cancelado": "Cancelaste un borrado",
+    "borrado_hecho": "Se hizo un borrado programado"
   },
   "fechas": {
     "hoy": "Hoy, {hora}",
@@ -377,6 +398,20 @@
     "ultimaFirma": "Última firma",
     "ultimaFirmaValor": "Versión {n} · {fecha}",
     "nuncaFirmo": "Todavía no publicaste desde el panel",
+    "proteccion": "Protecciones automáticas",
+    "cierre": "Cierre automático",
+    "cierreValor": "Tras 15 minutos sin usar el panel",
+    "otrosAparatos": "Otros aparatos",
+    "otrosAparatosValor": "Al entrar se cierra el panel en cualquier otro aparato",
+    "intentos": "Intentos equivocados",
+    "intentosValor": "Con 5 seguidos, hay que esperar 15 minutos",
+    "alPublicar": "Al publicar",
+    "alPublicarValor": "Se pide otra vez el código de 6 números",
+    "borrados": "Borrar",
+    "borradosValor": "Se hace 24 horas después y se puede cancelar",
+    "copia": "Copia automática del banco",
+    "copiaValor": "{fecha} · {n} capítulos · se guardan las últimas 30",
+    "sinCopia": "La primera se hace esta madrugada",
     "delicadas": "Acciones muy delicadas",
     "delicadasTexto": "Cada una pide tu sello: el archivo especial de tu pendrive, distinto de la llave que firma al publicar.",
     "accion": {
@@ -402,8 +437,8 @@
       "descargar_copia": "Se descarga una copia de todo el banco, las versiones y el registro.",
       "pasar_proyecto": "Queda anotado y te mostramos los pasos para entregar el proyecto.",
       "retirar": "Los jugadores dejarán de recibir capítulos nuevos hasta que vuelvas a publicar. Lo que ya tienen en su aparato no se borra.",
-      "borrar_libro": "Se borran del banco todos los capítulos de Patriarcas y Profetas. Lo publicado no cambia.",
-      "borrar_banco": "Se borra todo el banco. Lo publicado no cambia.",
+      "borrar_libro": "Se borran del banco todos los capítulos de Patriarcas y Profetas dentro de 24 horas; hasta entonces lo puedes cancelar. Lo publicado no cambia.",
+      "borrar_banco": "Se borra todo el banco dentro de 24 horas; hasta entonces lo puedes cancelar. Lo publicado no cambia.",
       "cambiar_usuario": "Desde ahora entrarás con el usuario nuevo.",
       "cambiar_contrasena": "Desde ahora entrarás con la contraseña nueva.",
       "ver_codigos": "Se crean 10 códigos nuevos y los anteriores dejan de servir."
@@ -414,7 +449,7 @@
       "borrar_banco": "Todo el banco"
     },
     "nuevoUsuario": "Usuario nuevo",
-    "nuevaContrasena": "Contraseña nueva (mínimo 8 letras)",
+    "nuevaContrasena": "Contraseña nueva (mínimo 10 letras)",
     "pendrive": "Conecta el pendrive donde guardas tu sello. Es distinto de la llave que firma al publicar y solo sirve para estas acciones.",
     "poner": "Poner mi sello",
     "comprobando": "Comprobando tu sello…",

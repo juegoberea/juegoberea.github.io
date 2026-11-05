@@ -7,7 +7,7 @@ import * as ed from 'npm:@noble/ed25519@2.3.0';
 import { crearArchivoClave } from '../_shared/generado/clave-firma.ts';
 import { deHex } from '../_shared/generado/codificacion.ts';
 import { ACCIONES_DELICADAS, textoDelDesafio, type AccionDelicada } from '../_shared/generado/sello.ts';
-import { anotar, comprobarAutora, json, LIBRO, Rechazo, servir, type Llamada } from '../_shared/servidor.ts';
+import { anotar, comprobarAutora, json, Rechazo, servir, type Llamada } from '../_shared/servidor.ts';
 
 const NOMBRE: Record<AccionDelicada, string> = {
   crear_llave: 'Crear una llave de firma nueva',
@@ -38,10 +38,11 @@ async function ejecutar(accion: AccionDelicada, datos: Record<string, unknown>, 
     }
     case 'borrar_libro':
     case 'borrar_banco': {
-      const consulta = admin.from('capitulos').delete();
-      const { error } = await (accion === 'borrar_libro' ? consulta.eq('libro_id', LIBRO) : consulta.gte('numero', 0));
+      // No se borra enseguida: 24 horas después (lo hace la base de datos), y se puede cancelar.
+      const { error } = await admin.rpc('servidor_programar_borrado', { p_accion: accion });
       if (error) throw new Error(error.message);
-      return { mensaje: accion === 'borrar_libro' ? 'Se borró Patriarcas y Profetas del banco. Lo publicado no cambia.' : 'Se borró todo el banco. Lo publicado no cambia.' };
+      const que = accion === 'borrar_libro' ? 'Patriarcas y Profetas' : 'todo el banco';
+      return { mensaje: `Se borrará ${que} dentro de 24 horas. Hasta entonces puedes cancelarlo desde Inicio o Seguridad. Antes de borrar se guarda una copia. Lo publicado no cambia.` };
     }
     case 'descargar_copia': {
       const tablas = ['libros', 'capitulos', 'preguntas', 'versiones', 'registro'];
@@ -70,7 +71,7 @@ async function ejecutar(accion: AccionDelicada, datos: Record<string, unknown>, 
     }
     case 'cambiar_contrasena': {
       const contrasena = String(datos.contrasena ?? '');
-      if (contrasena.length < 8) throw new Rechazo('La contraseña debe tener al menos 8 letras.');
+      if (contrasena.length < 10) throw new Rechazo('La contraseña debe tener al menos 10 letras.');
       const { error } = await admin.auth.admin.updateUserById(l.autora, { password: contrasena });
       if (error) throw new Rechazo(error.message);
       return { mensaje: 'Listo. Anota la contraseña nueva en tu sobre.' };
@@ -106,6 +107,6 @@ servir(async (pedido) => {
   }
 
   const resultado = await ejecutar(a, datos ?? {}, l);
-  await anotar(l, 'accion_delicada', NOMBRE[a]);
+  await anotar(l, 'accion_delicada', a.startsWith('borrar') ? `${NOMBRE[a]} · programado para dentro de 24 horas` : NOMBRE[a]);
   return json(resultado);
 });

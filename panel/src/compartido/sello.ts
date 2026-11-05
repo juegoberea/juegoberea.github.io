@@ -23,3 +23,20 @@ export type AccionDelicada = (typeof ACCIONES_DELICADAS)[number];
 export function textoDelDesafio(desafio: string, accion: AccionDelicada): Uint8Array {
   return new TextEncoder().encode(`berea-sello|v1|${desafio}|${accion}`);
 }
+
+/** Publicar pide el código de 6 números puesto hace 5 minutos o menos. */
+export const CODIGO_RECIENTE_SEGUNDOS = 300;
+/** Lo que responde el servidor cuando hay que escribir el código otra vez (el panel lo pide solo). */
+export const PIDE_CODIGO = 'pide-codigo';
+
+/** Segundos desde que se puso el código de 6 números, según el permiso de la sesión (JWT); null si nunca. */
+export function segundosDesdeElCodigo(jwt: string, ahora = Date.now()): number | null {
+  try {
+    const parte = jwt.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    const datos = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(parte.padEnd(Math.ceil(parte.length / 4) * 4, '=')), (c) => c.charCodeAt(0))));
+    const veces = (datos.amr ?? []).filter((m: { method?: string }) => m.method === 'totp').map((m: { timestamp?: number }) => Number(m.timestamp));
+    return veces.length ? Math.floor(ahora / 1000) - Math.max(...veces) : null;
+  } catch {
+    return null;
+  }
+}

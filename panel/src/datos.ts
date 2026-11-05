@@ -33,11 +33,21 @@ export interface Libro {
   total_capitulos: number;
 }
 
+/** Para avisar a la autora si algo raro pasó desde su última visita. */
+export interface Vigilancia {
+  /** Su entrada anterior (la actual es la última del registro). */
+  anterior: { cuando: string; navegador: string } | null;
+  /** Intentos equivocados de entrar desde la entrada anterior. */
+  fallos: number;
+  borrado: { accion: 'borrar_libro' | 'borrar_banco'; ejecutar_en: string } | null;
+}
+
 export interface DatosPanel {
   libro: Libro;
   capitulos: FilaCapitulo[];
   version: FilaVersion | null;
   registro: FilaRegistro[];
+  vigilancia: Vigilancia;
 }
 
 /** Un capítulo del banco con sus datos de revisión. */
@@ -51,13 +61,40 @@ function revisar<T>(r: { data: T; error: unknown }): T {
 export async function leerDatos(): Promise<DatosPanel> {
   if (muestra.enMuestra) return muestra.leerDatos();
   const cliente = db();
-  const [libro, capitulos, versiones, registro] = await Promise.all([
+  const [libro, capitulos, versiones, registro, vigilancia] = await Promise.all([
     cliente.from('libros').select('id, titulo, total_capitulos').eq('id', LIBRO).single(),
     cliente.from('capitulos').select('numero, titulo, validacion, avisos, huella, huella_publicada').eq('libro_id', LIBRO).order('numero'),
     leerVersiones(),
     cliente.from('registro').select('id, cuando, accion, detalle, navegador, resultado').order('id', { ascending: false }).limit(8),
+    leerVigilancia(),
   ]);
-  return { libro: revisar(libro) as Libro, capitulos: revisar(capitulos) ?? [], version: versiones.find((v) => !v.retirada_en) ?? null, registro: revisar(registro) ?? [] };
+  return { libro: revisar(libro) as Libro, capitulos: revisar(capitulos) ?? [], version: versiones.find((v) => !v.retirada_en) ?? null, registro: revisar(registro) ?? [], vigilancia };
+}
+
+async function leerVigilancia(): Promise<Vigilancia> {
+  const cliente = db();
+  const [entradas, borrado] = await Promise.all([
+    cliente.from('registro').select('cuando, navegador').eq('accion', 'entrada').order('id', { ascending: false }).limit(2),
+    cliente.rpc('borrado_pendiente'),
+  ]);
+  const anterior = (revisar(entradas) ?? [])[1] ?? null;
+  let fallos = cliente.from('registro').select('id', { count: 'exact', head: true }).eq('resultado', 'rechazado').in('accion', ['entrada_fallida', 'codigo_fallido', 'codigo_recuperacion']);
+  if (anterior) fallos = fallos.gt('cuando', anterior.cuando);
+  const { count, error } = await fallos;
+  if (error) throw error;
+  return { anterior, fallos: count ?? 0, borrado: revisar(borrado) ?? null };
+}
+
+/** Cancela el borrado programado (no pide el sello: deja todo como estaba). */
+export async function cancelarBorrado(): Promise<void> {
+  if (muestra.enMuestra) return;
+  revisar(await db().rpc('cancelar_borrado'));
+}
+
+/** La última copia automática del banco, o null si todavía no hay. */
+export async function ultimaCopia(): Promise<{ creada_en: string; capitulos: number; guardadas: number } | null> {
+  if (muestra.enMuestra) return null;
+  return revisar(await db().rpc('ultima_copia')) ?? null;
 }
 
 export async function leerVersiones(): Promise<FilaVersion[]> {

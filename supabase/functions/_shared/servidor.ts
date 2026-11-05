@@ -1,6 +1,7 @@
 // Piezas comunes de las funciones del servidor: permisos para el panel, respuestas y quién llama.
 
 import { createClient, type SupabaseClient } from 'npm:@supabase/supabase-js@2';
+import { CODIGO_RECIENTE_SEGUNDOS, PIDE_CODIGO, segundosDesdeElCodigo } from './generado/sello.ts';
 
 export const LIBRO = 'patriarcas-y-profetas';
 
@@ -49,6 +50,15 @@ export async function comprobarAutora(pedido: Request): Promise<Llamada> {
     autora: quien.user.id,
     navegador: `${sistema} · ${navegador}`,
   };
+}
+
+/** Para lo que llega a los jugadores: el código de 6 números tiene que ser de hace 5 minutos o menos. */
+export function exigirCodigoReciente(pedido: Request): void {
+  const jwt = (pedido.headers.get('Authorization') ?? '').replace(/^Bearer\s+/i, '');
+  const segundos = segundosDesdeElCodigo(jwt);
+  if (segundos === null || segundos > CODIGO_RECIENTE_SEGUNDOS) {
+    throw new Rechazo(PIDE_CODIGO, 403);
+  }
 }
 
 export async function anotar(l: Llamada, accion: string, detalle: string, resultado: 'hecho' | 'rechazado' = 'hecho'): Promise<void> {

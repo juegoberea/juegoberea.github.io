@@ -251,4 +251,6 @@ function Codigo() {
 }
 
 aplicarTema(temaVibrante, 'normal');
-render(<Codigo />, document.getElementById('codigo')!);
+// Ninguna otra página puede mostrar el código dentro de la suya.
+if (window.top === window.self) render(<Codigo />, document.getElementById('codigo')!);
+else document.body.textContent = 'Código de Berea solo se abre en su propia pestaña.';

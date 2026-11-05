@@ -114,6 +114,8 @@ a { color: var(--color-primary); }
 
 .note { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-radius: var(--radio-md); font-size: 15px; line-height: 21px; font-weight: 700; }
 .note svg { flex: none; margin-top: 1px; }
+.aviso-borrado { align-items: center; flex-wrap: wrap; }
+.aviso-borrado > span { flex: 1 1 260px; }
 .note.ok { background: var(--color-correcto-soft); color: var(--color-correcto-ink); }
 .note.info { background: var(--color-intermedia-soft); color: var(--color-intermedia-ink); }
 .note.err { background: var(--color-incorrecto-soft); color: var(--color-incorrecto-ink); }

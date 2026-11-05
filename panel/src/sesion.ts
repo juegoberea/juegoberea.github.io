@@ -3,6 +3,7 @@
 
 import type { AuthError } from '@supabase/supabase-js';
 import { correoDeUsuario, describirNavegador } from './estados';
+import { CODIGO_RECIENTE_SEGUNDOS, segundosDesdeElCodigo } from './compartido/sello';
 import { enMuestra } from './muestra';
 import { db } from './supabase';
 import { t } from './textos';
@@ -94,19 +95,58 @@ async function activar(): Promise<Fase> {
   return { fase: 'activar', factorId: data.id, qr: data.totp.qr_code, clave: data.totp.secret };
 }
 
+/** Texto de espera si hubo 5 intentos equivocados seguidos (lo decide el servidor); null si se puede probar. */
+async function textoDePausa(): Promise<string | null> {
+  const { data } = await db().rpc('pausa_de_entrada');
+  return typeof data === 'number' && data > 0 ? t('errores.pausa', { n: Math.ceil(data / 60) }) : null;
+}
+
+/** Anota un intento equivocado y devuelve el texto que corresponde (con la espera, si ya van 5). */
+async function intentoEquivocado(tipo: 'contrasena' | 'codigo', error: unknown): Promise<string> {
+  const { data } = await db().rpc('anotar_entrada_fallida', { p_tipo: tipo, p_navegador: describirNavegador(navigator.userAgent) });
+  return typeof data === 'number' && data > 0 ? t('errores.pausa', { n: Math.ceil(data / 60) }) : mensajeDeError(error);
+}
+
+const esEquivocado = (error: unknown) => [t('errores.credenciales'), t('errores.codigo')].includes(mensajeDeError(error));
+
 export async function entrar(usuario: string, contrasena: string): Promise<Fase> {
+  const pausa = await textoDePausa();
+  if (pausa) return { fase: 'fuera', error: pausa };
   const { error } = await db().auth.signInWithPassword({ email: correoDeUsuario(usuario), password: contrasena });
-  if (error) return { fase: 'fuera', error: mensajeDeError(error) };
+  if (error) return { fase: 'fuera', error: esEquivocado(error) ? await intentoEquivocado('contrasena', error) : mensajeDeError(error) };
   return faseActual();
 }
 
-/** Comprueba el código de 6 números (para entrar o para activarlo). */
+/** Comprueba el código de 6 números (para entrar o para activarlo). Al entrar, cierra el panel en cualquier otro aparato. */
 export async function confirmarCodigo(fase: Extract<Fase, { fase: 'codigo' | 'activar' }>, codigo: string): Promise<Fase> {
+  const pausa = await textoDePausa();
+  if (pausa) return { ...fase, error: pausa };
   const { error } = await db().auth.mfa.challengeAndVerify({ factorId: fase.factorId, code: codigo });
-  if (error) return { ...fase, error: mensajeDeError(error) };
+  if (error) return { ...fase, error: esEquivocado(error) ? await intentoEquivocado('codigo', error) : mensajeDeError(error) };
+  await db().auth.signOut({ scope: 'others' });
   if (fase.fase === 'activar') await anotar('codigo_activado');
   await anotar('entrada');
   return faseConCodigo();
+}
+
+/** ¿El código de 6 números se puso hace poco? (Publicar lo exige: si no, se pide otra vez.) */
+export async function codigoReciente(): Promise<boolean> {
+  if (enMuestra) return true;
+  const { data } = await db().auth.getSession();
+  const segundos = data.session ? segundosDesdeElCodigo(data.session.access_token) : null;
+  // Un minuto de margen con el límite del servidor, por si tarda en llegar.
+  return segundos !== null && segundos < CODIGO_RECIENTE_SEGUNDOS - 60;
+}
+
+/** Vuelve a confirmar el código de 6 números sin salir del panel. Devuelve el error, o null si quedó bien. */
+export async function confirmarOtraVez(codigo: string): Promise<string | null> {
+  if (enMuestra) return null;
+  const { data: factores } = await db().auth.mfa.listFactors();
+  const factor = factores?.totp.find((f) => f.status === 'verified');
+  if (!factor) return t('errores.general');
+  const { error } = await db().auth.mfa.challengeAndVerify({ factorId: factor.id, code: codigo });
+  if (!error) return null;
+  return esEquivocado(error) ? intentoEquivocado('codigo', error) : mensajeDeError(error);
 }
 
 export async function usarCodigoRecuperacion(codigo: string): Promise<Fase> {
@@ -118,7 +158,8 @@ export async function usarCodigoRecuperacion(codigo: string): Promise<Fase> {
   return activar();
 }
 
-export async function salir(): Promise<Fase> {
+export async function salir(aviso?: string): Promise<Fase> {
+  if (enMuestra) return { fase: 'fuera', error: aviso };
   await db().auth.signOut();
-  return { fase: 'fuera' };
+  return { fase: 'fuera', error: aviso };
 }
